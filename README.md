@@ -26,6 +26,7 @@ Desenvolvido por **Yuri Henrique**.
 
 ## Documentação
 
+- [Documentação](docs/README.md)
 - [Arquitetura](docs/architecture.md)
 - [Guia de Desenvolvimento](docs/development-guide.md)
 - [Fluxo do Gateway/whatsapp](docs/fluxo%20gateway.md)

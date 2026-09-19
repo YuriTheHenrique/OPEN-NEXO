@@ -18,17 +18,109 @@ nexo/modules/
 
 Cada módulo deve possuir responsabilidades bem definidas.
 
-Estrutura recomendada:
+Estrutura típica:
 
-```text
-modulo/
-├── __init__.py
-├── router.py
-├── services.py
-├── models.py
-├── schemas.py
-└── events.py
-```
+    `modulo/
+    ├── __init__.py
+    ├── plugin.py
+    ├── models.py
+    ├── router.py
+    ├── services.py
+    ├── schemas.py
+    └── events.py`
+
+Os arquivos são opcionais e devem ser utilizados conforme a necessidade do módulo.
+O `plugin.py` é utilizado para declarar a integração do módulo com o Core.
+
+---
+
+# Sistema de plugins
+
+O NEXO possui uma arquitetura modular baseada em plugins.
+
+Novos módulos devem ser criados dentro de:
+
+    `nexo/modules/`
+
+O carregador central identifica automaticamente os módulos disponíveis e registra seus componentes conforme a estrutura fornecida.
+
+O carregador está localizado em:
+
+    `nexo/core/loader.py`
+
+O Core do NEXO não deve possuir imports diretos dos módulos de negócio.
+
+Isso permite que módulos sejam adicionados ou removidos sem necessidade de alterar o núcleo da aplicação.
+
+## Estrutura de um plugin
+
+Um módulo pode fornecer diferentes componentes conforme sua necessidade:
+
+    `modulo/
+    ├── __init__.py
+    ├── plugin.py
+    ├── models.py
+    ├── router.py
+    ├── services.py
+    ├── schemas.py
+    └── events.py`
+
+Nem todos os arquivos são obrigatórios.
+
+O plugin deve fornecer apenas os componentes necessários para sua funcionalidade.
+
+### plugin.py
+
+O arquivo `plugin.py` é utilizado para declarar a integração do módulo com o NEXO.
+
+Ele pode definir, conforme a necessidade do módulo:
+
+- informações do módulo;
+- rotas;
+- cards exibidos na página inicial;
+- integrações;
+- tarefas em segundo plano;
+- configurações específicas do módulo.
+
+### models.py
+
+Quando presente, o `models.py` contém os modelos de banco de dados utilizados pelo módulo.
+
+O loader identifica esses modelos e os integra à camada de persistência do NEXO.
+
+### Tarefas em segundo plano
+
+Módulos que necessitam executar tarefas periódicas ou contínuas podem disponibilizar:
+
+    `get_background_tasks()`
+
+O loader identifica essa função e registra as tarefas durante a inicialização da aplicação.
+
+## Princípio de desacoplamento
+
+Um módulo não deve depender de imports diretos do Core para conhecer outros módulos de negócio.
+
+Preferir:
+
+    `Módulo
+       |
+       v
+    Interface / Evento / Integração
+       |
+       v
+    Outro módulo`
+
+Evitar:
+
+    `Módulo A
+       |
+       v
+    import módulo_b
+       |
+       v
+    Módulo B`
+
+A arquitetura de plugins permite que cada módulo permaneça independente e possa evoluir sem modificar o núcleo do NEXO.
 
 ---
 

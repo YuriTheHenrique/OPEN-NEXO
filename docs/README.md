@@ -1,86 +1,112 @@
-# NEXO
+# Documentação do NEXO
 
-## Visão geral
+Esta pasta contém a documentação técnica do NEXO (Núcleo de Execução Operacional).
 
-NEXO é uma plataforma modular desenvolvida para integração, processamento e visualização de informações operacionais.
-
-O projeto surgiu a partir do MVP SINOD, com o objetivo de transformar dados recebidos do SINapse em informações estruturadas, indicadores operacionais e dashboards para acompanhamento.
+O NEXO é uma plataforma modular desenvolvida em Python, baseada em FastAPI, SQLAlchemy e SQLite, com arquitetura orientada a plugins e carregamento dinâmico de módulos.
 
 ---
 
-## Objetivos
+## Documentação
 
-- Integrar dados operacionais em tempo real.
-- Centralizar informações provenientes do SINapse.
-- Disponibilizar indicadores visuais.
-- Criar uma arquitetura preparada para expansão de módulos.
+### Arquitetura
+
+Descrição da arquitetura interna do NEXO, incluindo Core, Loader, sistema de plugins, módulos, persistência e princípios de desacoplamento.
+
+[Arquitetura](architecture.md)
+
+### Guia de desenvolvimento
+
+Orientações para desenvolvimento, organização de módulos, criação de plugins e utilização dos componentes da plataforma.
+
+[Guia de Desenvolvimento](development-guide.md)
+
+### Roadmap
+
+Funcionalidades planejadas, melhorias futuras e evolução prevista para o projeto.
+
+[Roadmap](roadmap.md)
+
+### Glossário
+
+Termos, conceitos e nomenclaturas utilizados no projeto.
+
+[Glossário](glossary.md)
+
+### Decisões arquiteturais
+
+Registro das principais decisões técnicas e arquiteturais tomadas durante o desenvolvimento do NEXO.
+
+[Decisões Arquiteturais](decisions/)
 
 ---
 
-## Arquitetura
+## Organização
 
-O NEXO utiliza uma arquitetura modular organizada em:
+A documentação acompanha a estrutura modular do projeto.
 
-- Core: componentes fundamentais do sistema.
-- Modules: funcionalidades independentes.
-- App: recursos de interface, templates e arquivos estáticos.
-
-Mais detalhes em:
-`docs/architecture.md`
-
----
-
-## Tecnologias
-
-- Python
-- FastAPI
-- SQLAlchemy
-- Jinja2
-- SQLite
+```text
+docs/
+├── README.md
+├── architecture.md
+├── development-guide.md
+├── roadmap.md
+├── glossary.md
+└── decisions/
+```
 
 ---
 
-## Estrutura do projeto
+## Arquitetura em resumo
 
-NEXO/
-├── nexo/
-│ ├── core/
-│ ├── modules/
-│ └── data/
+O NEXO é dividido conceitualmente em:
+
+```text
+NEXO
 │
-├── app/
-│ ├── templates/
-│ └── static/
+├── Core
+│   ├── Inicialização
+│   ├── Loader
+│   ├── Persistência
+│   └── Infraestrutura
 │
-├── docs/
-├── certs/
-└── scripts auxiliares
+├── Modules
+│   ├── Funcionalidades
+│   ├── Plugins
+│   ├── Modelos
+│   └── Serviços
+│
+└── App
+    ├── Interface
+    ├── Templates
+    └── Arquivos estáticos
+```
 
----
+O Core fornece a infraestrutura da plataforma, enquanto os módulos concentram as funcionalidades de negócio.
 
-## Ferramentas de desenvolvimento
+O `loader.py` realiza a descoberta e integração dos módulos disponíveis, permitindo que novas funcionalidades sejam adicionadas sem a necessidade de alterar manualmente o núcleo da aplicação.
 
-SINSIM	Simulação de mensagens do SINapse
-run.bat	Inicialização da aplicação
-generate_cert.py	Criação de certificados
-logs	Rastreamento de execução
-
----
-
-## Módulos atuais
-
-| Módulo | Descrição |
-|---|---|
-| dashboard | Interface de acompanhamento operacional |
-| sinapse | Integração com dados do SINapse |
-| ativos | Gestão de informações de ativos |
-| teste | Ambiente de testes |
+Mais detalhes estão disponíveis em [Arquitetura](architecture.md).
 
 ---
 
 ## Desenvolvimento
 
-Consulte:
+Para informações sobre como desenvolver e adicionar funcionalidades ao NEXO, consulte:
 
-`docs/development-guide.md`
+[Guia de Desenvolvimento](development-guide.md)
 
+---
+
+## Projeto
+
+O NEXO utiliza uma arquitetura projetada para evolução incremental e modularidade.
+
+Novos recursos devem, sempre que possível, ser implementados como módulos independentes, mantendo o Core estável e reduzindo o acoplamento entre funcionalidades.
+
+---
+
+## Licença
+
+O NEXO é distribuído sob a licença Apache License 2.0.
+
+Consulte o arquivo [`LICENSE`](../LICENSE) na raiz do projeto para os termos completos da licença.

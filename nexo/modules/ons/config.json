@@ -1,0 +1,7 @@
+{
+    "base_url": "https://integra.ons.org.br/api",
+    "usuario": "Login",
+    "senha": "***",
+    "intervalo_sincronizacao_segundos": 300,
+    "ativo": true
+}

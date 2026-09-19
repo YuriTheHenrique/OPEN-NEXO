@@ -1,0 +1,34 @@
+===============================================
+
+INSTALAR PYTHON 3.12 PELA MICROSOFT STORE
+
+Clicar duas vezes no "InstallAPI" e esperar
+ao terminar
+Clicar duas vezes em "run"
+
+================================================
+
+Acessar Dashboard primeiro, pelo navegador, o navegador irá questionar o certificado e dizer que não é seguro, confirmar e continuar mesmo assim.
+Ao abrir o dashboard, verá as usinas.
+Copiar o link do API e colar no API do Sinapse
+Clicar em ativar.
+
+Feito!
+
+================================
+
+Dashboard:
+https://127.0.0.1:8000/dashboard
+
+API:
+https://127.0.0.1:8000/sinapse
+
+================================
+
+
+Não fechar o CMD/terminal/telinha preta com letrinhas cinzas e verdes.
+
+SE FOR INSTALAR EM OUTRO COMPUTADOR, DEVE-SE GERAR CERTIFICADOS HTTPS ÚNICOS, É POR COMPUTADOR DEVIDO À LIMITAÇÕES DE ACESSO AOS SERVIDORES DA EMPRESA(BYPASS)
+
+Para gerar, executar generate_cert.py com python 3.12
+

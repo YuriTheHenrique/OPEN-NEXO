@@ -1,0 +1,50 @@
+TODO SINOD / SINAPSE
+
+STATUS ATUAL:
+[X] Receber lista de eventos
+[X] Salvar no SQLite
+[X] Parser de restrição/liberação
+[X] Corrigir horário UTC
+[X] Log de processamento
+[X] Teste com SINSIM
+[X] Dashboard atualizando dados
+[X] Extrair domínio de restrições quando EventBus estiver implementado
+[X] Mostrar histórico das restrições
+[X] Criar gráfico de MW limitado ao longo do tempo (modelo/linhas diferentes: revisar)
+[X] Mostrar última atualização da usina
+[X] Criar filtros por usina
+[X] Gráfico histórico só atualiza manualmente (corrigir atualização automática)
+[X] Criar tratamento correto para Restrição=0 (aceita como null/100% da usina) e ajustar o impacto no gráfico
+[X] Possibilitar inversão do gráfico (restrição/hora solicitada → geração/hora permitida)
+[X] Criar histórico por status (pendente e confirmada) e evitar duplicação de pendente/confirmada
+[X] Criar proteção contra eventos duplicados (pendente/confirmada)
+[X] Avaliar WebSocket no futuro
+[X] Horas de recebimento e atualização só atualiza manualmente (corrigir)
+[X] Extração de RDO das usinas
+[X] Webhook para o Whatsapp (Baileys)
+
+PRÓXIMOS PASSOS - EM PRODUÇÃO
+[ ] Integração com outros API do ONS
+    - Integrado como plugin
+    - Página criada
+    - Login e senha configurável
+    - Coleta de dados feita
+    + Integrar ao dashboard(a caminho)
+
+PARSER
+[ ] Suportar novas mensagens do ONS
+[ ] Criar tratamento para eventos desconhecidos
+[ ] Adicionar novos tipos:
+    - Restrição
+    - Liberação
+    - Reativo
+    - Desligamento
+
+BANCO
+[ ] Criar histórico completo por usina
+[ ] Avaliar migração SQLite -> PostgreSQL
+[ ] Backup do banco(em processo, diário)
+
+IDEIAS FUTURAS
+[ ] Mapa das usinas
+[ ] Dashboard operacional completo

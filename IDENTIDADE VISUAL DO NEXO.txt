@@ -1,0 +1,17 @@
+## IDENTIDADE VISUAL DO NEXO
+
+A identidade visual do NEXO é uma decisão permanente.
+
+Azul NEXO:
+#08314A
+
+Usar principalmente na barra superior e em elementos de identidade. Não aplicar indiscriminadamente.
+
+Tipografia:
+- Geist para a interface principal
+- IBM Plex Sans para dados operacionais, indicadores, tabelas e informações numéricas
+- IBM Plex Mono para conteúdo monoespaçado
+
+A interface deve permanecer limpa, técnica e moderna.
+
+O design do NEXO não deve ser reinventado sem motivo. Novos módulos devem parecer parte do mesmo sistema.

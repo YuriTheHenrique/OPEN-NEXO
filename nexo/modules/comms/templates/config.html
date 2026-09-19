@@ -1,0 +1,2916 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NEXO | COMMS</title>
+
+    <!-- =====================================================
+         FONTES
+         ===================================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- =====================================================
+         QR CODE
+         ===================================================== -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+        integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    ></script>
+
+    <style>
+
+        /* =====================================================
+           VARIÁVEIS
+           ===================================================== */
+
+        :root {
+            --font-ui: "Geist", sans-serif;
+            --font-data: "IBM Plex Sans", sans-serif;
+            --font-mono: "IBM Plex Mono", monospace;
+
+            --nexo-blue: #08314A;
+
+            --bg: #f3f5f6;
+            --surface: #ffffff;
+            --surface-hover: #fafbfb;
+
+            --border: #dfe3e6;
+            --border-hover: #c5cbd0;
+
+            --text: #161a1d;
+            --text-secondary: #4b555e;
+            --text-muted: #68727b;
+
+            --shadow: rgba(0, 0, 0, 0.05);
+
+            --status-active-bg: #edf8f1;
+            --status-active-text: #176b3a;
+            --status-active-dot: #22a05a;
+
+            --status-inactive-bg: #f0f2f3;
+            --status-inactive-text: #68727b;
+            --status-inactive-dot: #9aa3aa;
+
+            --status-warning-bg: #fff7e5;
+            --status-warning-text: #8a6500;
+            --status-warning-dot: #d9a300;
+
+            --status-error-bg: #fceeed;
+            --status-error-text: #9d3028;
+            --status-error-dot: #c83c32;
+        }
+
+
+        /* =====================================================
+           MODO ESCURO
+           ===================================================== */
+
+        [data-theme="dark"] {
+            --bg: #101518;
+            --surface: #171d21;
+            --surface-hover: #1c2328;
+
+            --border: #293238;
+            --border-hover: #3a454c;
+
+            --text: #f1f4f5;
+            --text-secondary: #b4bdc3;
+            --text-muted: #87939b;
+
+            --shadow: rgba(0, 0, 0, 0.22);
+
+            --status-active-bg: #173225;
+            --status-active-text: #78c99a;
+            --status-active-dot: #45b979;
+
+            --status-inactive-bg: #252b2f;
+            --status-inactive-text: #9aa4aa;
+            --status-inactive-dot: #747e85;
+
+            --status-warning-bg: #332d18;
+            --status-warning-text: #e2c66d;
+            --status-warning-dot: #d9b84d;
+
+            --status-error-bg: #351f1d;
+            --status-error-text: #e28b83;
+            --status-error-dot: #d7655c;
+        }
+
+
+        /* =====================================================
+           BASE
+           ===================================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            color-scheme: light;
+        }
+
+        html[data-theme="dark"] {
+            color-scheme: dark;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            font-family: var(--font-ui);
+
+            background: var(--bg);
+            color: var(--text);
+
+            -webkit-font-smoothing: antialiased;
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease;
+        }
+
+
+        /* =====================================================
+           LAYOUT
+           ===================================================== */
+
+        .page {
+            min-height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        /* =====================================================
+           HEADER
+           ===================================================== */
+
+        .header {
+            height: 48px;
+            flex-shrink: 0;
+
+            background: var(--nexo-blue);
+            color: #f4f7f9;
+        }
+
+        .header-content {
+            width: 100%;
+            height: 100%;
+
+            padding: 0 32px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            min-width: 0;
+
+            display: flex;
+            align-items: center;
+
+            gap: 14px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+
+            gap: 6px;
+
+            color: #f4f7f9;
+            text-decoration: none;
+
+            font-size: 17px;
+            line-height: 1;
+            font-weight: 650;
+
+            letter-spacing: -0.25px;
+
+            transition: opacity 0.15s ease;
+        }
+
+        .back-link:hover {
+            opacity: 0.82;
+        }
+
+        .back-arrow {
+            font-size: 17px;
+            line-height: 1;
+            font-weight: 400;
+        }
+
+        .header-divider {
+            width: 1px;
+            height: 18px;
+
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .module-name {
+            font-size: 12px;
+            font-weight: 600;
+
+            letter-spacing: 0.65px;
+            text-transform: uppercase;
+
+            white-space: nowrap;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+
+            gap: 18px;
+        }
+
+        .datetime {
+            font-family: var(--font-data);
+
+            font-size: 11px;
+            font-weight: 500;
+
+            color: rgba(244, 247, 249, 0.88);
+
+            letter-spacing: 0.15px;
+
+            white-space: nowrap;
+        }
+
+        .theme-button {
+            width: 27px;
+            height: 27px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 0;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.22);
+
+            border-radius: 5px;
+
+            background: rgba(255, 255, 255, 0.06);
+
+            color: #f4f7f9;
+
+            font-family: var(--font-ui);
+            font-size: 13px;
+
+            cursor: pointer;
+
+            transition:
+                background 0.15s ease,
+                border-color 0.15s ease;
+        }
+
+        .theme-button:hover {
+            background: rgba(255, 255, 255, 0.13);
+
+            border-color:
+                rgba(255, 255, 255, 0.35);
+        }
+
+
+        /* =====================================================
+           CONTEÚDO
+           ===================================================== */
+
+        .content {
+            width: 100%;
+            max-width: 1600px;
+
+            margin: 0 auto;
+
+            padding: 42px 36px 52px;
+        }
+
+        .page-heading {
+            margin-bottom: 30px;
+
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+
+            gap: 24px;
+        }
+
+        .page-title {
+            margin: 0;
+
+            font-size: 27px;
+            line-height: 1.2;
+
+            font-weight: 650;
+
+            letter-spacing: -0.65px;
+        }
+
+        .page-subtitle {
+            margin: 8px 0 0;
+
+            font-size: 13px;
+            line-height: 1.5;
+
+            color: var(--text-secondary);
+        }
+
+
+        /* =====================================================
+           STATUS PRINCIPAL
+           ===================================================== */
+
+        .module-status {
+            flex-shrink: 0;
+
+            display: inline-flex;
+            align-items: center;
+
+            gap: 7px;
+
+            padding: 8px 11px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 6px;
+
+            background: var(--surface);
+
+            color: var(--text-secondary);
+
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .module-status-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: var(--status-inactive-dot);
+        }
+
+        .module-status.active {
+            background: var(--status-active-bg);
+
+            border-color:
+                rgba(34, 160, 90, 0.18);
+
+            color: var(--status-active-text);
+        }
+
+        .module-status.active
+        .module-status-dot {
+            background: var(--status-active-dot);
+        }
+
+
+        /* =====================================================
+           GRID PRINCIPAL
+           ===================================================== */
+
+        .config-grid {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.45fr)
+                minmax(340px, 0.55fr);
+
+            gap: 14px;
+
+            align-items: start;
+        }
+
+
+        /* =====================================================
+           CARD
+           ===================================================== */
+
+        .card {
+            padding: 22px;
+
+            background: var(--surface);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 7px;
+
+            transition:
+                background 0.15s ease,
+                border-color 0.15s ease,
+                box-shadow 0.15s ease;
+        }
+
+        .card:hover {
+            background: var(--surface-hover);
+
+            border-color:
+                var(--border-hover);
+
+            box-shadow:
+                0 4px 16px var(--shadow);
+        }
+
+
+        /* =====================================================
+           CABEÇALHO DO CARD
+           ===================================================== */
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+
+            gap: 16px;
+
+            margin-bottom: 21px;
+        }
+
+        .card-title {
+            margin: 0;
+
+            font-size: 18px;
+            line-height: 1.25;
+
+            font-weight: 600;
+
+            letter-spacing: -0.25px;
+        }
+
+        .card-subtitle {
+            margin: 5px 0 0;
+
+            font-size: 12px;
+            line-height: 1.4;
+
+            color: var(--text-muted);
+        }
+
+
+        /* =====================================================
+           SEÇÕES
+           ===================================================== */
+
+        .section {
+            margin-top: 26px;
+
+            padding-top: 24px;
+
+            border-top:
+                1px solid var(--border);
+        }
+
+        .section:first-of-type {
+            margin-top: 0;
+
+            padding-top: 0;
+
+            border-top: none;
+        }
+
+        .section-title {
+            margin: 0 0 6px;
+
+            font-size: 15px;
+            line-height: 1.35;
+
+            font-weight: 600;
+        }
+
+        .section-description {
+            margin: 0 0 18px;
+
+            color: var(--text-secondary);
+
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+
+        /* =====================================================
+           CONFIGURAÇÃO GERAL
+           ===================================================== */
+
+        .setting-row {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding: 13px 14px;
+
+            margin-bottom: 18px;
+
+            background: var(--surface-hover);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 6px;
+        }
+
+        .setting-info {
+            min-width: 0;
+        }
+
+        .setting-title {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .setting-description {
+            margin-top: 4px;
+
+            color: var(--text-muted);
+
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+
+        /* =====================================================
+           SWITCH
+           ===================================================== */
+
+        .switch {
+            position: relative;
+
+            width: 42px;
+            height: 23px;
+
+            flex-shrink: 0;
+        }
+
+        .switch input {
+            opacity: 0;
+
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+
+            inset: 0;
+
+            cursor: pointer;
+
+            background: #9aa3aa;
+
+            border-radius: 999px;
+
+            transition: 0.2s;
+        }
+
+        .slider::before {
+            content: "";
+
+            position: absolute;
+
+            width: 17px;
+            height: 17px;
+
+            left: 3px;
+            top: 3px;
+
+            background: #ffffff;
+
+            border-radius: 50%;
+
+            box-shadow:
+                0 1px 3px rgba(0, 0, 0, 0.22);
+
+            transition: 0.2s;
+        }
+
+        .switch input:checked + .slider {
+            background:
+                var(--status-active-dot);
+        }
+
+        .switch input:checked + .slider::before {
+            transform: translateX(19px);
+        }
+
+
+        /* =====================================================
+           CAMPOS
+           ===================================================== */
+
+        .field {
+            margin-bottom: 16px;
+        }
+
+        .field:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 6px;
+
+            color: var(--text-secondary);
+
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+
+            padding: 9px 10px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 5px;
+
+            background: var(--surface);
+
+            color: var(--text);
+
+            font-family: var(--font-ui);
+            font-size: 12px;
+
+            outline: none;
+
+            transition:
+                border-color 0.15s ease,
+                box-shadow 0.15s ease,
+                background 0.15s ease;
+        }
+
+        input:hover,
+        textarea:hover,
+        select:hover {
+            border-color:
+                var(--border-hover);
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color:
+                var(--border-hover);
+
+            box-shadow:
+                0 0 0 3px var(--shadow);
+        }
+
+        input[type="number"] {
+            max-width: 180px;
+        }
+
+        textarea {
+            min-height: 130px;
+
+            resize: vertical;
+
+            line-height: 1.55;
+        }
+
+        .field small {
+            display: block;
+
+            margin-top: 6px;
+
+            color: var(--text-muted);
+
+            font-size: 10px;
+            line-height: 1.45;
+        }
+
+
+        /* =====================================================
+           BOTÕES
+           ===================================================== */
+
+        button {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 7px;
+
+            padding: 7px 12px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 5px;
+
+            background: var(--surface);
+
+            color: var(--text-secondary);
+
+            font-family: var(--font-ui);
+
+            font-size: 11px;
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition:
+                background 0.15s ease,
+                border-color 0.15s ease,
+                color 0.15s ease,
+                transform 0.05s ease;
+        }
+
+        button:hover {
+            background: var(--surface-hover);
+
+            border-color:
+                var(--border-hover);
+
+            color: var(--text);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+
+            cursor: not-allowed;
+        }
+
+        .button-primary {
+            background: var(--nexo-blue);
+
+            border-color: var(--nexo-blue);
+
+            color: #ffffff;
+        }
+
+        .button-primary:hover {
+            background: #0b405e;
+
+            border-color: #0b405e;
+
+            color: #ffffff;
+        }
+
+
+        /* =====================================================
+           ACTION ROW
+           ===================================================== */
+
+        .action-row {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+        .feedback {
+            color: var(--status-active-text);
+
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .feedback.error {
+            color: var(--status-error-text);
+        }
+
+
+        /* =====================================================
+           TEMPLATE
+           ===================================================== */
+
+        .template-box {
+            padding: 16px;
+
+            margin-bottom: 12px;
+
+            background: var(--surface-hover);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 6px;
+        }
+
+        .template-box:last-child {
+            margin-bottom: 0;
+        }
+
+        .template-header {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-bottom: 12px;
+        }
+
+        .template-title {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .event-tag {
+            display: inline-block;
+
+            padding: 4px 7px;
+
+            border-radius: 4px;
+
+            background: var(--surface);
+
+            border:
+                1px solid var(--border);
+
+            color: var(--text-muted);
+
+            font-family: var(--font-mono);
+
+            font-size: 9px;
+        }
+
+
+        /* =====================================================
+           VARIÁVEIS
+           ===================================================== */
+
+        .variables {
+            padding: 14px;
+
+            background: var(--surface-hover);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 6px;
+
+            line-height: 1.8;
+        }
+
+        .variables-title {
+            margin-bottom: 8px;
+
+            color: var(--text-secondary);
+
+            font-size: 10px;
+            font-weight: 600;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.35px;
+        }
+
+        .variable {
+            display: inline-block;
+
+            padding: 4px 7px;
+
+            margin: 3px 2px;
+
+            background: var(--surface);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 4px;
+
+            color: var(--text-secondary);
+
+            font-family: var(--font-mono);
+
+            font-size: 10px;
+        }
+
+        .description {
+            margin-top: 11px;
+
+            color: var(--text-muted);
+
+            font-size: 10px;
+
+            line-height: 1.55;
+        }
+
+
+        /* =====================================================
+           TEMPLATE POR ATIVO
+           ===================================================== */
+
+        .asset-selector {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1fr)
+                180px;
+
+            gap: 10px;
+
+            margin-bottom: 13px;
+        }
+
+        .asset-template-area {
+            display: none;
+
+            margin-top: 18px;
+
+            padding-top: 18px;
+
+            border-top:
+                1px solid var(--border);
+        }
+
+        .asset-template-area.visible {
+            display: block;
+        }
+
+
+        /* =====================================================
+           WHATSAPP
+           ===================================================== */
+
+        .gateway-status {
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            padding: 12px 13px;
+
+            margin-bottom: 16px;
+
+            background: var(--surface-hover);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 6px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            background: var(--status-inactive-dot);
+        }
+
+        .status-dot.connected {
+            background: var(--status-active-dot);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(34, 160, 90, 0.10);
+        }
+
+        .status-dot.connecting {
+            background: var(--status-warning-dot);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(217, 163, 0, 0.10);
+        }
+
+        .status-dot.disconnected {
+            background: var(--status-error-dot);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(200, 60, 50, 0.10);
+        }
+
+        .status-text {
+            color: var(--text);
+
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+
+        /* =====================================================
+           INDICADORES
+           ===================================================== */
+
+        .whatsapp-info {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 10px;
+
+            margin-bottom: 16px;
+        }
+
+        .info-box {
+            padding: 13px;
+
+            background: var(--surface-hover);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 6px;
+        }
+
+        .info-label {
+            margin-bottom: 5px;
+
+            color: var(--text-muted);
+
+            font-size: 9px;
+            font-weight: 600;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.4px;
+        }
+
+        .info-value {
+            color: var(--text);
+
+            font-family: var(--font-data);
+
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+
+        /* =====================================================
+           ERRO GATEWAY
+           ===================================================== */
+
+        .gateway-error {
+            display: none;
+
+            padding: 11px 12px;
+
+            margin-top: 13px;
+
+            border:
+                1px solid rgba(200, 60, 50, 0.18);
+
+            border-radius: 6px;
+
+            background: var(--status-error-bg);
+
+            color: var(--status-error-text);
+
+            font-size: 10px;
+
+            line-height: 1.5;
+        }
+
+        .gateway-error.visible {
+            display: block;
+        }
+
+
+        /* =====================================================
+           QR CODE
+           ===================================================== */
+
+        .qr-area {
+            display: none;
+
+            margin-top: 20px;
+
+            padding-top: 20px;
+
+            border-top:
+                1px solid var(--border);
+
+            text-align: center;
+        }
+
+        .qr-area.visible {
+            display: block;
+        }
+
+        .qr-title {
+            color: var(--text);
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .qr-message {
+            max-width: 300px;
+
+            margin: 6px auto 0;
+
+            color: var(--text-muted);
+
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        #qrcode {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            width: 220px;
+            height: 220px;
+
+            margin-top: 15px;
+
+            padding: 10px;
+
+            background: #ffffff;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 6px;
+
+            box-shadow:
+                0 3px 12px var(--shadow);
+        }
+
+        #qrcode img,
+        #qrcode canvas {
+            display: block;
+
+            width: 200px !important;
+            height: 200px !important;
+        }
+
+
+        /* =====================================================
+           RESPONSIVO
+           ===================================================== */
+
+        @media (max-width: 1050px) {
+
+            .config-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            .header-content {
+                padding: 0 18px;
+            }
+
+            .header-left {
+                gap: 10px;
+            }
+
+            .header-divider {
+                display: none;
+            }
+
+            .back-link {
+                font-size: 0;
+            }
+
+            .back-arrow {
+                font-size: 17px;
+            }
+
+            .datetime {
+                font-size: 10px;
+            }
+
+            .header-right {
+                gap: 10px;
+            }
+
+            .content {
+                padding: 32px 18px 42px;
+            }
+
+            .page-heading {
+                align-items: flex-start;
+
+                flex-direction: column;
+
+                gap: 16px;
+            }
+
+            .page-title {
+                font-size: 23px;
+            }
+
+            .module-status {
+                align-self: flex-start;
+            }
+
+            .asset-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .whatsapp-info {
+                grid-template-columns: 1fr;
+            }
+
+            .footer {
+                padding: 17px 18px;
+            }
+
+        }
+
+        @media (max-width: 430px) {
+
+            .datetime {
+                display: none;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+<div class="page">
+
+{% set modulo = "COMUNICAÇÕES" %}
+{% set voltar_url = "/" %}
+{% include "header.html" %}
+
+    <!-- =====================================================
+         CONTEÚDO
+         ===================================================== -->
+
+    <main class="content">
+
+
+        <!-- =================================================
+             CABEÇALHO DA PÁGINA
+             ================================================= -->
+
+        <div class="page-heading">
+
+            <div>
+
+                <h1 class="page-title">
+                    COMMS
+                </h1>
+
+                <p class="page-subtitle">
+                    Configuração do módulo de comunicações do NEXO.
+                </p>
+
+            </div>
+
+
+            <div
+                id="comms-badge"
+                class="module-status"
+            >
+
+                <span
+                    class="module-status-dot"
+                ></span>
+
+                <span id="comms-badge-text">
+                    Verificando
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             GRID
+             ================================================= -->
+
+        <div class="config-grid">
+
+
+            <!-- =================================================
+                 CARD CONFIGURAÇÃO
+                 ================================================= -->
+
+            <section class="card">
+
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h2 class="card-title">
+                            Configuração do COMMS
+                        </h2>
+
+                        <div class="card-subtitle">
+                            Controle das mensagens e templates operacionais
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =============================================
+                     CONFIGURAÇÃO GERAL
+                     ============================================== -->
+
+                <div class="section">
+
+                    <h3 class="section-title">
+                        Configuração geral
+                    </h3>
+
+                    <div class="section-description">
+                        Defina se o módulo pode gerar mensagens e
+                        quanto tempo deve aguardar antes do processamento.
+                    </div>
+
+
+                    <form
+                        id="form-config"
+                        method="post"
+                        action="/comms/config/page"
+                    >
+
+
+                        <div class="setting-row">
+
+                            <div class="setting-info">
+
+                                <div class="setting-title">
+                                    Mensagens habilitadas
+                                </div>
+
+                                <div class="setting-description">
+                                    Permite que o COMMS processe e envie mensagens.
+                                </div>
+
+                            </div>
+
+
+                            <label class="switch">
+
+                                <input
+                                    type="checkbox"
+                                    id="ativo"
+                                    name="ativo"
+
+                                    {% if config.ativo %}
+                                        checked
+                                    {% endif %}
+                                >
+
+                                <span class="slider"></span>
+
+                            </label>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label for="tempo_espera">
+                                Tempo de espera
+                            </label>
+
+                            <input
+                                type="number"
+                                id="tempo_espera"
+                                name="tempo_espera"
+
+                                min="0"
+                                max="300"
+
+                                value="{{ config.tempo_espera }}"
+                            >
+
+                            <small>
+                                Tempo, em segundos, antes da geração da mensagem.
+                                Use 0 para processamento imediato.
+                            </small>
+
+                        </div>
+
+
+                        <div class="action-row">
+
+                            <button
+                                type="submit"
+                                class="button-primary"
+                            >
+                                Salvar configuração
+                            </button>
+
+                            <span
+                                id="feedback-config"
+                                class="feedback"
+                            ></span>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+
+                <!-- =============================================
+                     TEMPLATES PADRÃO
+                     ============================================== -->
+
+                <div class="section">
+
+                    <h3 class="section-title">
+                        Templates padrão
+                    </h3>
+
+                    <div class="section-description">
+                        Estes templates serão utilizados quando não houver
+                        uma configuração específica para o ativo.
+                    </div>
+
+
+                    <!-- RESTRIÇÃO -->
+
+                    <div class="template-box">
+
+                        <div class="template-header">
+
+                            <span class="template-title">
+                                Restrição
+                            </span>
+
+                            <span class="event-tag">
+                                RESTRICAO
+                            </span>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <textarea
+                                id="template-restricao"
+                                placeholder="Digite o template de restrição..."
+                            >{{ template_restricao or "" }}</textarea>
+
+                        </div>
+
+
+                        <div class="action-row">
+
+                            <button
+                                type="button"
+                                onclick="salvarTemplatePadrao('RESTRICAO')"
+                            >
+                                Salvar template
+                            </button>
+
+                            <span
+                                id="feedback-restricao"
+                                class="feedback"
+                            ></span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- LIBERAÇÃO -->
+
+                    <div class="template-box">
+
+                        <div class="template-header">
+
+                            <span class="template-title">
+                                Liberação total
+                            </span>
+
+                            <span class="event-tag">
+                                LIBERACAO_TOTAL
+                            </span>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <textarea
+                                id="template-liberacao"
+                                placeholder="Digite o template de liberação..."
+                            >{{ template_liberacao or "" }}</textarea>
+
+                        </div>
+
+
+                        <div class="action-row">
+
+                            <button
+                                type="button"
+                                onclick="salvarTemplatePadrao('LIBERACAO_TOTAL')"
+                            >
+                                Salvar template
+                            </button>
+
+                            <span
+                                id="feedback-liberacao"
+                                class="feedback"
+                            ></span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =============================================
+                     TEMPLATE POR ATIVO
+                     ============================================== -->
+
+                <div class="section">
+
+                    <h3 class="section-title">
+                        Template específico por ativo
+                    </h3>
+
+                    <div class="section-description">
+                        Configure uma mensagem específica para uma determinada
+                        usina. Quando existir, ela terá prioridade sobre o
+                        template padrão.
+                    </div>
+
+
+                    <div class="asset-selector">
+
+                        <div>
+
+                            <label for="ativo-template">
+                                ID do ativo
+                            </label>
+
+                            <input
+                                type="text"
+                                id="ativo-template"
+                                placeholder="Ex.: MGUFLS"
+                            >
+
+                        </div>
+
+
+                        <div>
+
+                            <label for="tipo-template">
+                                Tipo de evento
+                            </label>
+
+                            <select id="tipo-template">
+
+                                <option value="RESTRICAO">
+                                    Restrição
+                                </option>
+
+                                <option value="LIBERACAO_TOTAL">
+                                    Liberação total
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="action-row">
+
+                        <button
+                            type="button"
+                            onclick="carregarTemplateAtivo()"
+                        >
+                            Carregar template
+                        </button>
+
+                        <span
+                            id="feedback-ativo"
+                            class="feedback"
+                        ></span>
+
+                    </div>
+
+
+                    <div
+                        id="area-template-ativo"
+                        class="asset-template-area"
+                    >
+
+                        <div class="field">
+
+                            <label for="template-ativo">
+                                Template do ativo
+                            </label>
+
+                            <textarea
+                                id="template-ativo"
+                                placeholder="Digite o template específico..."
+                            ></textarea>
+
+                        </div>
+
+
+                        <div class="action-row">
+
+                            <button
+                                type="button"
+                                class="button-primary"
+                                onclick="salvarTemplateAtivo()"
+                            >
+                                Salvar template do ativo
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =============================================
+                     VARIÁVEIS
+                     ============================================== -->
+
+                <div class="section">
+
+                    <h3 class="section-title">
+                        Variáveis disponíveis
+                    </h3>
+
+                    <div class="section-description">
+                        Você pode utilizar estas variáveis dentro dos templates.
+                        O COMMS fará a substituição automaticamente.
+                    </div>
+
+
+                    <div class="variables">
+
+                        <div class="variables-title">
+                            Variáveis disponíveis
+                        </div>
+
+
+                        <span class="variable">
+                            {apelido}
+                        </span>
+
+                        <span class="variable">
+                            {apelido_maiusculo}
+                        </span>
+
+                        <span class="variable">
+                            {hora}
+                        </span>
+
+                        <span class="variable">
+                            {hora_formatada}
+                        </span>
+
+                        <span class="variable">
+                            {origem}
+                        </span>
+
+                        <span class="variable">
+                            {potencia_restricao}
+                        </span>
+
+                        <span class="variable">
+                            {potencia_observada}
+                        </span>
+
+                        <span class="variable">
+                            {capacidade}
+                        </span>
+
+                        <span class="variable">
+                            {tipo_geracao}
+                        </span>
+
+                        <span class="variable">
+                            {regiao}
+                        </span>
+
+                        <span class="variable">
+                            {motivo}
+                        </span>
+
+                        <span class="variable">
+                            {informacao_adicional}
+                        </span>
+
+                    </div>
+
+
+                    <div class="description">
+
+                        As variáveis serão substituídas automaticamente
+                        pelos dados da ocorrência recebida pelo COMMS.
+
+                        <br><br>
+
+                        <strong>
+                            {informacao_adicional}
+                        </strong>
+
+                        pode ficar vazia quando o SINAPSE não enviar
+                        nenhuma informação adicional.
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 CARD WHATSAPP
+                 ================================================= -->
+
+            <section class="card">
+
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h2 class="card-title">
+                            WhatsApp Gateway
+                        </h2>
+
+                        <div class="card-subtitle">
+                            Estado da conexão e comunicação
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =============================================
+                     STATUS
+                     ============================================== -->
+
+                <div class="gateway-status">
+
+                    <span
+                        id="status-dot"
+                        class="status-dot"
+                    ></span>
+
+                    <span
+                        id="status-text"
+                        class="status-text"
+                    >
+                        Verificando...
+                    </span>
+
+                </div>
+
+
+
+                <!-- =============================================
+                     INDICADORES
+                     ============================================== -->
+
+                <div class="whatsapp-info">
+
+                    <div class="info-box">
+
+                        <div class="info-label">
+                            Mensagens pendentes
+                        </div>
+
+                        <div
+                            id="fila-pendente"
+                            class="info-value"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="info-label">
+                            Uptime
+                        </div>
+
+                        <div
+                            id="gateway-uptime"
+                            class="info-value"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =============================================
+                     ERRO
+                     ============================================== -->
+
+                <div
+                    id="gateway-error"
+                    class="gateway-error"
+                ></div>
+
+                <!-- =============================================
+                    AÇÕES DO WHATSAPP
+                    ============================================== -->
+
+                <div class="action-row">
+
+                    <button
+                        type="button"
+                        id="button-reconnect"
+                        onclick="reconectarWhatsApp()"
+                    >
+                        ↻ Reconectar
+                    </button>
+
+                    <button
+                        type="button"
+                        id="button-reset"
+                        onclick="resetarWhatsApp()"
+                    >
+                        Resetar sessão
+                    </button>
+
+                    <span
+                        id="feedback-whatsapp"
+                        class="feedback"
+                    ></span>
+
+                </div>
+
+                <!-- =============================================
+                     QR CODE
+                     ============================================== -->
+
+                <div
+                    id="qr-area"
+                    class="qr-area"
+                >
+
+                    <div class="qr-title">
+                        Pareamento do WhatsApp
+                    </div>
+
+                    <div class="qr-message">
+                        Escaneie este QR Code com o WhatsApp
+                        para conectar o Gateway.
+                    </div>
+
+                    <div id="qrcode"></div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+<script>
+
+    /* =========================================================
+       FEEDBACK
+       ========================================================= */
+
+    function mostrarFeedback(
+        elementoId,
+        mensagem,
+        erro = false
+    ) {
+
+        const elemento =
+            document.getElementById(
+                elementoId
+            );
+
+        if (!elemento) {
+            return;
+        }
+
+        elemento.textContent =
+            mensagem;
+
+        elemento.classList.toggle(
+            "error",
+            erro
+        );
+
+
+        setTimeout(
+            () => {
+
+                elemento.textContent =
+                    "";
+
+                elemento.classList.remove(
+                    "error"
+                );
+
+            },
+            4000
+        );
+
+    }
+
+
+    /* =========================================================
+       STATUS VISUAL DO COMMS
+       ========================================================= */
+
+    function atualizarStatusComms() {
+
+        const checkbox =
+            document.getElementById(
+                "ativo"
+            );
+
+        const badge =
+            document.getElementById(
+                "comms-badge"
+            );
+
+        const texto =
+            document.getElementById(
+                "comms-badge-text"
+            );
+
+
+        if (
+            !checkbox ||
+            !badge ||
+            !texto
+        ) {
+            return;
+        }
+
+
+        if (checkbox.checked) {
+
+            badge.classList.add(
+                "active"
+            );
+
+            texto.textContent =
+                "Mensagens habilitadas";
+
+        } else {
+
+            badge.classList.remove(
+                "active"
+            );
+
+            texto.textContent =
+                "Mensagens desabilitadas";
+
+        }
+
+    }
+
+
+    const checkboxComms =
+        document.getElementById(
+            "ativo"
+        );
+
+
+    if (checkboxComms) {
+
+        checkboxComms.addEventListener(
+            "change",
+            atualizarStatusComms
+        );
+
+    }
+
+
+    atualizarStatusComms();
+
+
+    /* =========================================================
+       CONFIGURAÇÃO GERAL
+       ========================================================= */
+
+    const formConfig =
+        document.getElementById(
+            "form-config"
+        );
+
+
+    if (formConfig) {
+
+        formConfig.addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                const formulario =
+                    new FormData(this);
+
+
+                try {
+
+                    const resposta =
+                        await fetch(
+                            this.action,
+                            {
+                                method: "POST",
+                                body: formulario
+                            }
+                        );
+
+
+                    if (!resposta.ok) {
+
+                        throw new Error(
+                            "Falha ao salvar configuração."
+                        );
+
+                    }
+
+
+                    mostrarFeedback(
+                        "feedback-config",
+                        "✓ Configuração salva."
+                    );
+
+
+                    atualizarStatusComms();
+
+
+                } catch (erro) {
+
+                    mostrarFeedback(
+                        "feedback-config",
+                        "Falha ao salvar configuração.",
+                        true
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       TEMPLATE PADRÃO
+       ========================================================= */
+
+    async function salvarTemplatePadrao(
+        tipoEvento
+    ) {
+
+        const textarea =
+            tipoEvento === "RESTRICAO"
+                ? document.getElementById(
+                    "template-restricao"
+                )
+                : document.getElementById(
+                    "template-liberacao"
+                );
+
+
+        const feedbackId =
+            tipoEvento === "RESTRICAO"
+                ? "feedback-restricao"
+                : "feedback-liberacao";
+
+
+        const formulario =
+            new FormData();
+
+
+        formulario.append(
+            "tipo_evento",
+            tipoEvento
+        );
+
+
+        formulario.append(
+            "template",
+            textarea.value
+        );
+
+
+        formulario.append(
+            "id_local_operacao",
+            ""
+        );
+
+
+        try {
+
+            const resposta =
+                await fetch(
+                    "/comms/config/page/template",
+                    {
+                        method: "POST",
+                        body: formulario
+                    }
+                );
+
+
+            if (!resposta.ok) {
+
+                throw new Error(
+                    "Falha ao salvar template."
+                );
+
+            }
+
+
+            mostrarFeedback(
+                feedbackId,
+                "✓ Template salvo."
+            );
+
+
+        } catch (erro) {
+
+            mostrarFeedback(
+                feedbackId,
+                "Falha ao salvar template.",
+                true
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       TEMPLATE POR ATIVO
+       ========================================================= */
+
+    async function carregarTemplateAtivo() {
+
+        const ativo =
+            document
+                .getElementById(
+                    "ativo-template"
+                )
+                .value
+                .trim();
+
+
+        const tipo =
+            document
+                .getElementById(
+                    "tipo-template"
+                )
+                .value;
+
+
+        const area =
+            document.getElementById(
+                "area-template-ativo"
+            );
+
+
+        const textarea =
+            document.getElementById(
+                "template-ativo"
+            );
+
+
+        if (!ativo) {
+
+            mostrarFeedback(
+                "feedback-ativo",
+                "Informe o ID do ativo.",
+                true
+            );
+
+            return;
+
+        }
+
+
+        try {
+
+            const resposta =
+                await fetch(
+                    `/comms/config/template-ativo/${encodeURIComponent(tipo)}/${encodeURIComponent(ativo)}`
+                );
+
+
+            if (!resposta.ok) {
+
+                throw new Error(
+                    "Falha ao consultar template."
+                );
+
+            }
+
+
+            const dados =
+                await resposta.json();
+
+
+            textarea.value =
+                dados.template || "";
+
+
+            area.classList.add(
+                "visible"
+            );
+
+
+            mostrarFeedback(
+                "feedback-ativo",
+                "✓ Template carregado."
+            );
+
+
+        } catch (erro) {
+
+            mostrarFeedback(
+                "feedback-ativo",
+                "Falha ao carregar template.",
+                true
+            );
+
+        }
+
+    }
+
+
+    async function salvarTemplateAtivo() {
+
+        const ativo =
+            document
+                .getElementById(
+                    "ativo-template"
+                )
+                .value
+                .trim();
+
+
+        const tipo =
+            document
+                .getElementById(
+                    "tipo-template"
+                )
+                .value;
+
+
+        const template =
+            document
+                .getElementById(
+                    "template-ativo"
+                )
+                .value;
+
+
+        if (!ativo) {
+
+            mostrarFeedback(
+                "feedback-ativo",
+                "Informe o ID do ativo.",
+                true
+            );
+
+            return;
+
+        }
+
+
+        const formulario =
+            new FormData();
+
+
+        formulario.append(
+            "tipo_evento",
+            tipo
+        );
+
+
+        formulario.append(
+            "template",
+            template
+        );
+
+
+        formulario.append(
+            "id_local_operacao",
+            ativo
+        );
+
+
+        try {
+
+            const resposta =
+                await fetch(
+                    "/comms/config/template-ativo",
+                    {
+                        method: "POST",
+                        body: formulario
+                    }
+                );
+
+
+            if (!resposta.ok) {
+
+                throw new Error(
+                    "Falha ao salvar template."
+                );
+
+            }
+
+
+            mostrarFeedback(
+                "feedback-ativo",
+                "✓ Template do ativo salvo."
+            );
+
+
+        } catch (erro) {
+
+            mostrarFeedback(
+                "feedback-ativo",
+                "Falha ao salvar template.",
+                true
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       WHATSAPP GATEWAY
+       ========================================================= */
+
+    function formatarUptime(
+        segundos
+    ) {
+
+        segundos =
+            Number(
+                segundos || 0
+            );
+
+
+        const dias =
+            Math.floor(
+                segundos / 86400
+            );
+
+
+        segundos %= 86400;
+
+
+        const horas =
+            Math.floor(
+                segundos / 3600
+            );
+
+
+        segundos %= 3600;
+
+
+        const minutos =
+            Math.floor(
+                segundos / 60
+            );
+
+
+        if (dias > 0) {
+
+            return `${dias}d ${horas}h`;
+
+        }
+
+
+        if (horas > 0) {
+
+            return `${horas}h ${minutos}min`;
+
+        }
+
+
+        return `${minutos}min`;
+
+    }
+
+
+    async function atualizarStatusWhatsApp() {
+
+        try {
+
+            const resposta =
+                await fetch(
+                    "/comms/config/whatsapp/status"
+                );
+
+
+            if (!resposta.ok) {
+
+                throw new Error();
+
+            }
+
+
+            const dados =
+                await resposta.json();
+
+
+            const status =
+                dados.whatsapp?.status ||
+                "disconnected";
+
+
+            const conectado =
+                dados.whatsapp?.conectado === true;
+
+
+            const dot =
+                document.getElementById(
+                    "status-dot"
+                );
+
+
+            const texto =
+                document.getElementById(
+                    "status-text"
+                );
+
+
+            dot.className =
+                "status-dot " +
+                status;
+
+
+            if (conectado) {
+
+                texto.textContent =
+                    "WhatsApp conectado";
+
+            } else if (
+                status === "connecting"
+            ) {
+
+                texto.textContent =
+                    "Conectando ao WhatsApp...";
+
+            } else {
+
+                texto.textContent =
+                    "WhatsApp desconectado";
+
+            }
+
+
+            document
+                .getElementById(
+                    "fila-pendente"
+                )
+                .textContent =
+                dados.fila?.pendentes ?? 0;
+
+
+            document
+                .getElementById(
+                    "gateway-uptime"
+                )
+                .textContent =
+                formatarUptime(
+                    dados.uptime
+                );
+
+
+            document
+                .getElementById(
+                    "gateway-error"
+                )
+                .classList.remove(
+                    "visible"
+                );
+
+
+        } catch (erro) {
+
+            const dot =
+                document.getElementById(
+                    "status-dot"
+                );
+
+
+            dot.className =
+                "status-dot disconnected";
+
+
+            document
+                .getElementById(
+                    "status-text"
+                )
+                .textContent =
+                "Gateway indisponível";
+
+
+            const erroElemento =
+                document.getElementById(
+                    "gateway-error"
+                );
+
+
+            erroElemento.textContent =
+                "Não foi possível comunicar com o WhatsApp Gateway.";
+
+
+            erroElemento.classList.add(
+                "visible"
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       QR CODE
+       ========================================================= */
+
+    let qrCodeInstance = null;
+
+
+    function renderizarQRCode(
+        conteudo
+    ) {
+
+        const container =
+            document.getElementById(
+                "qrcode"
+            );
+
+
+        if (!container) {
+            return;
+        }
+
+
+        container.innerHTML =
+            "";
+
+
+        if (
+            typeof QRCode ===
+            "undefined"
+        ) {
+
+            console.error(
+                "Biblioteca QRCode.js não carregada."
+            );
+
+            return;
+
+        }
+
+
+        qrCodeInstance =
+            new QRCode(
+                container,
+                {
+                    text: conteudo,
+
+                    width: 200,
+                    height: 200,
+
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+
+                    correctLevel:
+                        QRCode.CorrectLevel.M
+                }
+            );
+
+    }
+
+
+    async function atualizarQRCode() {
+
+        try {
+
+            const resposta =
+                await fetch(
+                    "/comms/config/whatsapp/qr"
+                );
+
+
+            if (!resposta.ok) {
+                return;
+            }
+
+
+            const dados =
+                await resposta.json();
+
+
+            const area =
+                document.getElementById(
+                    "qr-area"
+                );
+
+
+            if (
+                dados.ok &&
+                dados.disponivel &&
+                dados.qr
+            ) {
+
+                area.classList.add(
+                    "visible"
+                );
+
+
+                renderizarQRCode(
+                    dados.qr
+                );
+
+
+            } else {
+
+                area.classList.remove(
+                    "visible"
+                );
+
+
+                const container =
+                    document.getElementById(
+                        "qrcode"
+                    );
+
+
+                if (container) {
+
+                    container.innerHTML =
+                        "";
+
+                }
+
+            }
+
+
+        } catch (erro) {
+
+            document
+                .getElementById(
+                    "qr-area"
+                )
+                .classList.remove(
+                    "visible"
+                );
+
+        }
+
+    }
+
+    /* =========================================================
+       AÇÕES DO WHATSAPP GATEWAY
+       ========================================================= */
+
+    async function reconectarWhatsApp() {
+
+        const botao =
+            document.getElementById(
+                "button-reconnect"
+            );
+
+        if (!botao) {
+            return;
+        }
+
+        botao.disabled = true;
+
+        mostrarFeedback(
+            "feedback-whatsapp",
+            "Solicitando reconexão..."
+        );
+
+        try {
+
+            const resposta =
+                await fetch(
+                    "/comms/config/whatsapp/reconectar",
+                    {
+                        method: "POST"
+                    }
+                );
+
+            const dados =
+                await resposta.json();
+
+            if (!resposta.ok || !dados.ok) {
+
+                throw new Error(
+                    dados.erro ||
+                    "Falha ao solicitar reconexão."
+                );
+
+            }
+
+            mostrarFeedback(
+                "feedback-whatsapp",
+                "✓ Reconexão iniciada."
+            );
+
+            setTimeout(
+                atualizarStatusWhatsApp,
+                500
+            );
+
+        } catch (erro) {
+
+            mostrarFeedback(
+                "feedback-whatsapp",
+                erro.message ||
+                "Falha ao reconectar o WhatsApp.",
+                true
+            );
+
+        } finally {
+
+            botao.disabled = false;
+
+        }
+
+    }
+
+
+    async function resetarWhatsApp() {
+
+        const confirmado =
+            window.confirm(
+                "Isso removerá a sessão atual do WhatsApp e exigirá um novo pareamento.\n\n" +
+                "Deseja realmente resetar a sessão?"
+            );
+
+        if (!confirmado) {
+            return;
+        }
+
+
+        const botao =
+            document.getElementById(
+                "button-reset"
+            );
+
+        if (!botao) {
+            return;
+        }
+
+
+        botao.disabled = true;
+
+
+        mostrarFeedback(
+            "feedback-whatsapp",
+            "Resetando sessão..."
+        );
+
+
+        try {
+
+            const resposta =
+                await fetch(
+                    "/comms/config/whatsapp/resetar",
+                    {
+                        method: "POST"
+                    }
+                );
+
+
+            const dados =
+                await resposta.json();
+
+
+            if (
+                !resposta.ok ||
+                !dados.ok
+            ) {
+
+                throw new Error(
+                    dados.erro ||
+                    "Falha ao resetar a sessão."
+                );
+
+            }
+
+
+            mostrarFeedback(
+                "feedback-whatsapp",
+                "✓ Sessão removida. Aguardando novo pareamento."
+            );
+
+
+            setTimeout(
+                atualizarStatusWhatsApp,
+                500
+            );
+
+
+            setTimeout(
+                atualizarQRCode,
+                500
+            );
+
+
+        } catch (erro) {
+
+            mostrarFeedback(
+                "feedback-whatsapp",
+                erro.message ||
+                "Falha ao resetar a sessão.",
+                true
+            );
+
+        } finally {
+
+            botao.disabled = false;
+
+        }
+
+    }
+
+    /* =========================================================
+       ATUALIZAÇÃO AUTOMÁTICA
+       ========================================================= */
+
+    atualizarStatusWhatsApp();
+
+    atualizarQRCode();
+
+
+    setInterval(
+        atualizarStatusWhatsApp,
+        5000
+    );
+
+
+    setInterval(
+        atualizarQRCode,
+        5000
+    );
+
+
+</script>
+
+</body>
+</html>

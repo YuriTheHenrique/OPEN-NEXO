@@ -1,0 +1,1 @@
+import sqlite3; db=sqlite3.connect('nexo/data/nexo.db'); c=db.cursor(); c.execute('DELETE FROM restricoes'); print(f'{c.rowcount} restrições removidas.'); db.commit(); db.close()

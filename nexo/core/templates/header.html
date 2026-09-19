@@ -1,0 +1,250 @@
+<!-- =====================================================
+     NEXO UNIVERSAL HEADER COMPONENT
+     ===================================================== -->
+<style>
+    :root {
+        --nexo-blue: #08314A;
+        --font-ui: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        --font-data: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .header {
+        height: 48px;
+        width: 100%;
+        background: var(--nexo-blue, #08314A);
+        color: #f4f7f9;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+    }
+
+    .header-content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+        box-sizing: border-box;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .back-link {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #f4f7f9;
+        text-decoration: none;
+        font-family: var(--font-ui);
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 0.05em;
+        transition: opacity 0.15s ease;
+    }
+
+    .back-link:hover {
+        opacity: 0.8;
+    }
+
+    .back-arrow {
+        font-size: 16px;
+        line-height: 1;
+    }
+
+    .header-separator {
+        color: rgba(255, 255, 255, 0.25);
+        font-size: 13px;
+        font-weight: 300;
+    }
+
+    .header-title {
+        font-family: var(--font-ui);
+        font-weight: 600;
+        font-size: 13px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #e2e8f0;
+    }
+
+    /* CONTROLE CENTRAL DE DATA (APENAS QUANDO ATIVADO) */
+    .header-center {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .header-date-btn {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #f4f7f9;
+        border-radius: 4px;
+        padding: 4px 8px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .header-date-btn:hover {
+        background: rgba(255, 255, 255, 0.18);
+    }
+
+    .header-date-input {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #f4f7f9;
+        border-radius: 4px;
+        padding: 4px 10px;
+        font-size: 12px;
+        font-family: var(--font-ui);
+        text-align: center;
+        width: 140px;
+        cursor: pointer;
+        outline: none;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .header-clock {
+        font-family: var(--font-data);
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.03em;
+        color: #cbd5e1;
+    }
+
+    /* BOTÃO DE TEMA COM ÍCONES VETORIAIS SVG OFICIAIS */
+    .theme-toggle {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        transition: opacity 0.15s ease;
+    }
+
+    .theme-toggle:hover {
+        opacity: 0.8;
+    }
+
+    .icon-theme {
+        width: 18px;
+        height: 18px;
+        stroke: #f4f7f9;
+        stroke-width: 2;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .icon-sun {
+        display: none;
+    }
+
+    .icon-moon {
+        display: block;
+    }
+
+    [data-theme="dark"] .icon-sun {
+        display: block;
+    }
+
+    [data-theme="dark"] .icon-moon {
+        display: none;
+    }
+</style>
+
+<header class="header">
+    <div class="header-content">
+        <!-- ESQUERDA -->
+        <div class="header-left">
+            <a href="{{ voltar_url or '/' }}" class="back-link">
+                <span class="back-arrow">←</span>
+                <span>NEXO</span>
+            </a>
+            <span class="header-separator">|</span>
+            <span class="header-title">{{ modulo or 'SISTEMA' }}</span>
+        </div>
+
+        <!-- CENTRO (RENDERIZADO APENAS QUANDO SOLICITADO) -->
+        {% if exibir_data %}
+        <div class="header-center">
+            <button type="button" class="header-date-btn" id="btnDataAnterior" title="Dia anterior">←</button>
+            <input type="text" id="seletorData" class="header-date-input" placeholder="Selecionar data">
+            <button type="button" class="header-date-btn" id="btnDataProxima" title="Próximo dia">→</button>
+            <button type="button" class="header-date-btn" id="btnDataHoje" title="Ir para hoje">Hoje</button>
+        </div>
+        {% else %}
+        <div></div>
+        {% endif %}
+
+        <!-- DIREITA -->
+        <div class="header-right">
+            <span class="header-clock" id="relogioNexo"></span>
+            <button class="theme-toggle" id="themeButton" type="button" aria-label="Alternar tema">
+                <svg class="icon-theme icon-sun" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="4"></circle>
+                    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+                </svg>
+                <svg class="icon-theme icon-moon" viewBox="0 0 24 24">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+</header>
+
+<script>
+    (function () {
+        function formatarDataHora() {
+            const agora = new Date();
+            const meses = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
+            const dia = String(agora.getDate()).padStart(2, "0");
+            const mes = meses[agora.getMonth()];
+            const ano = agora.getFullYear();
+            const hora = String(agora.getHours()).padStart(2, "0");
+            const min = String(agora.getMinutes()).padStart(2, "0");
+            const seg = String(agora.getSeconds()).padStart(2, "0");
+
+            const elemento = document.getElementById("relogioNexo");
+            if (elemento) {
+                elemento.textContent = `${dia} DE ${mes} DE ${ano} · ${hora}:${min}:${seg}`;
+            }
+        }
+
+        formatarDataHora();
+        setInterval(formatarDataHora, 1000);
+
+        const themeBtn = document.getElementById("themeButton");
+        const temaSalvo = localStorage.getItem("nexo-theme");
+
+        document.documentElement.setAttribute("data-theme", temaSalvo || "light");
+
+        if (themeBtn) {
+            themeBtn.addEventListener("click", function () {
+                const temaAtual = document.documentElement.getAttribute("data-theme") || "light";
+                const novoTema = temaAtual === "dark" ? "light" : "dark";
+
+                document.documentElement.setAttribute("data-theme", novoTema);
+                localStorage.setItem("nexo-theme", novoTema);
+
+                Object.values(window.graficos || {}).forEach(grafico => {
+                    grafico.update();
+                });
+            });
+        }
+    })();
+</script>

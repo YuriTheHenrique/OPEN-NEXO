@@ -1,0 +1,2460 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>NEXO | Dashboard</title>
+
+
+    <!-- =====================================================
+         FONTES
+         ===================================================== -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         BIBLIOTECAS
+         ===================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    >
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+
+
+    <!-- =====================================================
+         CSS DO DASHBOARD
+         ===================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="/dashboard/static/css/dashboard.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- Barra Superior Centralizada -->
+{% set modulo = "DASHBOARD" %}
+{% set voltar_url = "/" %}
+{% set exibir_data = true %}
+{% include "header.html" %}
+
+
+<div
+    class="page"
+    style="
+        display: flex;
+        flex-direction: row;
+        min-height: calc(100vh - 48px);
+        max-width: 100vw;
+    "
+>
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside
+        style="
+            width: 54px;
+            height: calc(100vh - 48px);
+            position: sticky;
+            top: 48px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 14px 0;
+            gap: 12px;
+            flex-shrink: 0;
+            z-index: 20;
+        "
+    >
+
+        <!-- Visão 1 -->
+        <button
+            type="button"
+            class="dashboard-button nav-dash-btn active"
+            onclick="navegarDashboard('tempo-real')"
+            title="Tempo Real"
+            style="
+                width: 38px;
+                height: 38px;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 6px;
+            "
+        >
+            <svg
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+        </button>
+
+
+        <!-- Visão 2 -->
+        <button
+            type="button"
+            class="dashboard-button nav-dash-btn"
+            onclick="navegarDashboard('pdp')"
+            title="Programação & PDP"
+            style="
+                width: 38px;
+                height: 38px;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 6px;
+            "
+        >
+            <svg
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+        </button>
+
+
+        <!-- Visão 3 -->
+        <button
+            type="button"
+            class="dashboard-button nav-dash-btn"
+            onclick="navegarDashboard('restricoes')"
+            title="Auditoria de Restrições"
+            style="
+                width: 38px;
+                height: 38px;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 6px;
+            "
+        >
+            <svg
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+            </svg>
+        </button>
+
+
+        <!-- Visão 4 -->
+        <button
+            type="button"
+            class="dashboard-button nav-dash-btn"
+            onclick="navegarDashboard('rdo')"
+            title="Relatório RDO"
+            style="
+                width: 38px;
+                height: 38px;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 6px;
+            "
+        >
+            <svg
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+        </button>
+
+    </aside>
+
+
+    <!-- CONTEÚDO PRINCIPAL -->
+
+    <div
+        style="
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        "
+    >
+
+        <main class="content">
+
+
+            <!-- =================================================
+                 INDICADORES
+                 ================================================= -->
+
+            <section class="dashboard-summary">
+
+                <div class="dashboard-stat card">
+
+                    <div class="stat-label">
+                        Sistema
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="sistema"
+                    >
+                        🟢 ONLINE
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-stat card">
+
+                    <div class="stat-label">
+                        Usinas que tiveram restrição
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="usinas"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-stat card">
+
+                    <div class="stat-label">
+                        Solicitações recebidas
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="eventos"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-stat card">
+
+                    <div class="stat-label">
+                        Última solicitação
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="ultimo"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-stat card">
+
+                    <div class="stat-label">
+                        Tempo médio entre restrições
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="tempoResposta"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 USINAS
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div
+                    id="painelUsinas"
+                    class="dashboard-usinas"
+                ></div>
+
+            </section>
+
+
+            <!-- =================================================
+                 GRÁFICO DE RESTRIÇÃO
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="card chart-card">
+
+                    <div class="chart-header">
+
+                        <div>
+
+                            <h2 class="section-title">
+                                Restrição por usina
+                            </h2>
+
+                        </div>
+
+
+                        <div class="chart-controls">
+
+                            <div class="chart-filters">
+
+                                <button
+                                    type="button"
+                                    class="dashboard-button"
+                                    onclick="filtroGrafico('todas')"
+                                >
+                                    Todas
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="dashboard-button"
+                                    onclick="filtroGrafico('restritas')"
+                                >
+                                    Apenas restritas
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="dashboard-button"
+                                    onclick="filtroGrafico('top')"
+                                >
+                                    Top impacto
+                                </button>
+
+                            </div>
+
+
+                            <select
+                                id="filtroUsina"
+                                class="dashboard-select"
+                                onchange="aplicarFiltroUsina()"
+                            >
+
+                                <option value="todas">
+                                    Todas as usinas
+                                </option>
+
+                            </select>
+
+
+                            <div class="chart-mode-group">
+
+                                <button
+                                    id="modoRestricao"
+                                    type="button"
+                                    class="chart-mode-button active"
+                                    onclick="alternarModoGrafico('restricao')"
+                                >
+                                    Restrição
+                                </button>
+
+                                <button
+                                    id="modoLimite"
+                                    type="button"
+                                    class="chart-mode-button"
+                                    onclick="alternarModoGrafico('limite')"
+                                >
+                                    Limite
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="chart-container">
+
+                        <canvas
+                            id="graficoRestricaoUsinas"
+                        ></canvas>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 VISÃO 3: AUDITORIA
+                 ================================================= -->
+
+            <section
+                id="visaoRestricoes"
+                class="dashboard-section"
+                style="display: none;"
+            >
+
+                <div class="card chart-card">
+
+                    <div class="chart-header">
+
+                        <div>
+                            <h2 class="section-title">
+                                Auditoria de Eventos & Restrições
+                            </h2>
+                        </div>
+
+                        <div
+                            class="chart-controls"
+                            style="
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                            "
+                        >
+                            <select
+                                id="filtroUsinaAuditoria"
+                                class="dashboard-select"
+                                multiple
+                                size="1"
+                                title="Selecione uma ou mais usinas"
+                                style="min-width: 220px;"
+                                onchange="aplicarFiltroAuditoria()"
+                            >
+                            </select>
+
+                            <span
+                                id="contadorHistorico"
+                                style="
+                                    font-size: 13px;
+                                    color: var(--text-muted);
+                                    font-family: var(--font-mono);
+                                "
+                            >
+                                0 eventos
+                            </span>
+
+                            <button
+                                type="button"
+                                class="dashboard-button"
+                                onclick="gerarPdfAuditoria()"
+                            >
+                                📄 Gerar PDF
+                            </button>
+                        </div>
+
+                    </div>
+
+
+                    <div style="overflow-x: auto; margin-top: 10px;">
+
+                        <table
+                            style="
+                                width: 100%;
+                                border-collapse: collapse;
+                                font-size: 13px;
+                                text-align: left;
+                            "
+                        >
+
+                            <thead>
+
+                                <tr
+                                    style="
+                                        border-bottom: 1px solid var(--border);
+                                        color: var(--text-muted);
+                                        font-size: 11px;
+                                        text-transform: uppercase;
+                                        letter-spacing: 0.04em;
+                                    "
+                                >
+
+                                    <th style="padding: 10px 12px;">
+                                        Horário
+                                    </th>
+
+                                    <th style="padding: 10px 12px;">
+                                        Usina
+                                    </th>
+
+                                    <th style="padding: 10px 12px;">
+                                        Evento
+                                    </th>
+
+                                    <th style="padding: 10px 12px;">
+                                        Limite (MW)
+                                    </th>
+
+                                    <th style="padding: 10px 12px;">
+                                        Corte (MW)
+                                    </th>
+
+                                    <th style="padding: 10px 12px;">
+                                        Tempo Resposta
+                                    </th>
+
+                                    <th style="padding: 10px 12px;">
+                                        Status
+                                    </th>
+
+                                    <th style="padding: 10px 12px;">
+                                        Detalhes
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="tabelaAuditoriaCorpo">
+
+                                <tr>
+
+                                    <td
+                                        colspan="8"
+                                        style="
+                                            padding: 20px;
+                                            text-align: center;
+                                            color: var(--text-muted);
+                                        "
+                                    >
+                                        Carregando histórico...
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 VISÃO 2: PDP
+                 ================================================= -->
+
+            <section
+                id="visaoPDP"
+                class="dashboard-section"
+                style="display: none;"
+            >
+
+                <div
+                    class="kpi-grid"
+                    style="
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                        gap: 10px;
+                        margin-bottom: 16px;
+                    "
+                >
+
+                    <div
+                        class="card"
+                        style="padding: 14px;"
+                    >
+
+                        <div class="stat-label">
+                            Energia Programada (Dia)
+                        </div>
+
+                        <div
+                            class="stat-value"
+                            id="pdpEnergiaTotal"
+                            style="
+                                font-size: 20px;
+                                font-family: var(--font-mono);
+                                font-weight: 600;
+                                color: #3b82f6;
+                            "
+                        >
+                            0.00 MWh
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="card"
+                        style="padding: 14px;"
+                    >
+
+                        <div class="stat-label">
+                            Pico Programado
+                        </div>
+
+                        <div
+                            class="stat-value"
+                            id="pdpPicoMax"
+                            style="
+                                font-size: 20px;
+                                font-family: var(--font-mono);
+                                font-weight: 600;
+                            "
+                        >
+                            0.00 MW
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="card"
+                        style="padding: 14px;"
+                    >
+
+                        <div class="stat-label">
+                            Patamares Recebidos
+                        </div>
+
+                        <div
+                            class="stat-value"
+                            id="pdpTotalPatamares"
+                            style="
+                                font-size: 20px;
+                                font-family: var(--font-mono);
+                                font-weight: 600;
+                            "
+                        >
+                            0 / 48
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card chart-card">
+
+                    <div class="chart-header">
+
+                        <div>
+
+                            <h2 class="section-title">
+                                Curva de Geração Programada (PDP)
+                            </h2>
+
+                        </div>
+
+                        <div class="chart-controls">
+
+                            <span
+                                style="
+                                    font-size: 12px;
+                                    color: var(--text-muted);
+                                    font-family: var(--font-mono);
+                                "
+                            >
+                                48 PATAMARES SEMI-HORÁRIOS
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="chart-container"
+                        style="
+                            height: 260px;
+                            margin-top: 10px;
+                        "
+                    >
+
+                        <canvas id="graficoPDP"></canvas>
+
+                    </div>
+
+
+                    <div
+                        style="
+                            overflow-x: auto;
+                            margin-top: 20px;
+                            max-height: 280px;
+                        "
+                    >
+
+                        <table
+                            style="
+                                width: 100%;
+                                border-collapse: collapse;
+                                font-size: 13px;
+                                text-align: left;
+                            "
+                        >
+
+                            <thead
+                                style="
+                                    position: sticky;
+                                    top: 0;
+                                    background: var(--surface);
+                                "
+                            >
+
+                                <tr
+                                    style="
+                                        border-bottom: 1px solid var(--border);
+                                        color: var(--text-muted);
+                                        font-size: 11px;
+                                        text-transform: uppercase;
+                                    "
+                                >
+
+                                    <th style="padding: 8px 12px;">
+                                        Patamar
+                                    </th>
+
+                                    <th style="padding: 8px 12px;">
+                                        Horário
+                                    </th>
+
+                                    <th style="padding: 8px 12px;">
+                                        Código Usina
+                                    </th>
+
+                                    <th style="padding: 8px 12px;">
+                                        Potência Programada (MW)
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="tabelaPDPCorpo">
+
+                                <tr>
+
+                                    <td
+                                        colspan="4"
+                                        style="
+                                            padding: 20px;
+                                            text-align: center;
+                                            color: var(--text-muted);
+                                        "
+                                    >
+                                        Aguardando dados da Programação...
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL DE HISTÓRICO / DETALHES
+     ========================================================= -->
+
+<div
+    class="modal"
+    id="modalHistorico"
+>
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h2 id="tituloHistorico">
+                    Detalhes do Evento
+                </h2>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    onclick="fecharHistorico()"
+                    aria-label="Fechar"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div
+                class="modal-body"
+                id="corpoHistorico"
+            ></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     MODAL DE DETALHES DA AUDITORIA
+     ========================================================= -->
+
+<div
+    class="modal"
+    id="modalAuditoriaDetalhes"
+>
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h2 id="tituloAuditoriaDetalhes">
+                    Detalhes do Evento
+                </h2>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    onclick="fecharDetalhesAuditoria()"
+                    aria-label="Fechar"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div
+                class="modal-body"
+                id="corpoAuditoriaDetalhes"
+            >
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT DO DASHBOARD
+     ========================================================= -->
+
+<script>
+
+    function alternarDevMode() {
+
+        document.body.classList.toggle(
+            "devmode"
+        );
+
+        localStorage.setItem(
+            "devmode",
+            document.body.classList.contains(
+                "devmode"
+            )
+        );
+
+    }
+
+
+    function obterDataLocal() {
+
+        const hoje = new Date();
+
+        return (
+            hoje.getFullYear() +
+            "-" +
+            String(
+                hoje.getMonth() + 1
+            ).padStart(2, "0") +
+            "-" +
+            String(
+                hoje.getDate()
+            ).padStart(2, "0")
+        );
+
+    }
+
+
+    // =====================================================
+    // VARIÁVEIS GLOBAIS
+    // =====================================================
+
+    var chartPDPInstance = null;
+    var requisicaoPDP = 0;
+
+    // Eventos carregados na auditoria.
+    // Mantidos globalmente para abrir os detalhes
+    // sem colocar o conteúdo do evento dentro do HTML.
+    window.eventosAuditoria = [];
+
+
+    // =====================================================
+    // NAVEGAÇÃO
+    // =====================================================
+
+    async function navegarDashboard(abaId) {
+
+        document
+            .querySelectorAll('.nav-dash-btn')
+            .forEach(btn =>
+                btn.classList.remove('active')
+            );
+
+        if (
+            typeof event !== 'undefined' &&
+            event &&
+            event.currentTarget
+        ) {
+
+            event.currentTarget.classList.add(
+                'active'
+            );
+
+        }
+
+
+        const visaoTempoReal =
+            document.querySelectorAll(
+                '.dashboard-summary, .dashboard-section:not(#visaoRestricoes):not(#visaoPDP)'
+            );
+
+        const visaoRestricoes =
+            document.getElementById(
+                'visaoRestricoes'
+            );
+
+        const visaoPDP =
+            document.getElementById(
+                'visaoPDP'
+            );
+
+
+        visaoTempoReal.forEach(
+            el => el.style.display = 'none'
+        );
+
+        if (visaoRestricoes) {
+            visaoRestricoes.style.display = 'none';
+        }
+
+        if (visaoPDP) {
+            visaoPDP.style.display = 'none';
+        }
+
+
+        if (abaId === 'tempo-real') {
+            visaoTempoReal.forEach(el => el.style.display = '');
+
+            setTimeout(() => {
+                Object.values(window.graficos || {}).forEach(grafico => {
+                    if (!grafico) return;
+
+                    const duracao = grafico.options.animation?.duration ?? 800;
+
+                    grafico.options.animation.duration = 0;
+                    grafico.resize();
+                    grafico.update('none');
+                    grafico.options.animation.duration = duracao;
+                });
+            }, 0);
+        }
+
+        else if (abaId === 'restricoes') {
+
+            if (visaoRestricoes) {
+                visaoRestricoes.style.display = 'block';
+            }
+
+            await carregarTabelaAuditoria();
+
+        }
+
+        else if (abaId === 'pdp') {
+
+            if (visaoPDP) {
+                visaoPDP.style.display = 'block';
+            }
+
+            setTimeout(
+                () => carregarVisaoPDP(),
+                60
+            );
+
+        }
+
+    }
+
+
+    // =====================================================
+    // PDP
+    // =====================================================
+
+    async function carregarVisaoPDP() {
+
+        const minhaRequisicaoPDP =
+            ++requisicaoPDP;
+
+        const data =
+            (
+                typeof dataSelecionada !== 'undefined' &&
+                dataSelecionada
+            )
+                ? dataSelecionada
+                : obterDataLocal();
+
+
+        const corpo =
+            document.getElementById(
+                'tabelaPDPCorpo'
+            );
+
+
+        if (chartPDPInstance) {
+
+            chartPDPInstance.destroy();
+            chartPDPInstance = null;
+
+        }
+
+
+        try {
+
+            let res =
+                await fetch(
+                    `/api/dashboard/pdp?data=${encodeURIComponent(data)}`
+                );
+
+
+            if (res.status === 404) {
+
+                res =
+                    await fetch(
+                        `/api/pdp?data=${encodeURIComponent(data)}`
+                    );
+
+            }
+
+
+            const dados =
+                await res.json();
+
+
+            if (
+                minhaRequisicaoPDP !==
+                requisicaoPDP
+            ) {
+
+                console.log(
+                    "⚠️ Resposta PDP descartada:",
+                    data,
+                    minhaRequisicaoPDP
+                );
+
+                return;
+
+            }
+
+
+            const elEnergia =
+                document.getElementById(
+                    'pdpEnergiaTotal'
+                );
+
+            const elPico =
+                document.getElementById(
+                    'pdpPicoMax'
+                );
+
+            const elTotal =
+                document.getElementById(
+                    'pdpTotalPatamares'
+                );
+
+
+            if (elEnergia) {
+                elEnergia.innerText =
+                    `${dados.energia_total_mwh || '0.00'} MWh`;
+            }
+
+            if (elPico) {
+                elPico.innerText =
+                    `${dados.pico_mw || '0.00'} MW`;
+            }
+
+            if (elTotal) {
+                elTotal.innerText =
+                    `${dados.total_patamares || 0} / 48`;
+            }
+
+
+            if (
+                !dados.tabela ||
+                dados.tabela.length === 0
+            ) {
+
+                if (corpo) {
+
+                    corpo.innerHTML = `
+                        <tr>
+                            <td
+                                colspan="4"
+                                style="
+                                    padding: 24px;
+                                    text-align: center;
+                                    color: var(--text-muted);
+                                "
+                            >
+                                Nenhuma curva de PDP coletada
+                                para a data ${data}.
+                            </td>
+                        </tr>
+                    `;
+
+                }
+
+            }
+
+            else {
+
+                if (corpo) {
+
+                    corpo.innerHTML =
+                        dados.tabela.map(
+                            p => `
+
+                        <tr
+                            style="
+                                border-bottom: 1px solid var(--border);
+                                font-family: var(--font-mono);
+                            "
+                        >
+
+                            <td
+                                style="
+                                    padding: 8px 12px;
+                                    color: var(--text-muted);
+                                "
+                            >
+                                #${String(
+                                    p.numero
+                                ).padStart(2, '0')}
+                            </td>
+
+                            <td
+                                style="
+                                    padding: 8px 12px;
+                                    font-weight: 600;
+                                "
+                            >
+                                ${p.hora}
+                            </td>
+
+                            <td
+                                style="
+                                    padding: 8px 12px;
+                                    font-family: var(--font-data);
+                                "
+                            >
+                                ${p.codigo_usina}
+                            </td>
+
+                            <td
+                                style="
+                                    padding: 8px 12px;
+                                    color: #3b82f6;
+                                    font-weight: 600;
+                                "
+                            >
+                                ${p.potencia_mw} MW
+                            </td>
+
+                        </tr>
+
+                    `
+                        ).join('');
+
+                }
+
+            }
+
+
+            let labelsPlot =
+                dados.labels;
+
+            let valoresPlot =
+                dados.valores;
+
+
+            if (
+                !labelsPlot ||
+                labelsPlot.length === 0
+            ) {
+
+                labelsPlot = [];
+                valoresPlot = [];
+
+                for (
+                    let p = 1;
+                    p <= 48;
+                    p++
+                ) {
+
+                    const min =
+                        (p - 1) * 30;
+
+                    const h =
+                        String(
+                            Math.floor(
+                                min / 60
+                            )
+                        ).padStart(2, '0') +
+                        ':' +
+                        String(
+                            min % 60
+                        ).padStart(2, '0');
+
+                    labelsPlot.push(h);
+                    valoresPlot.push(0);
+
+                }
+
+            }
+
+
+            const canvasEl =
+                document.getElementById(
+                    'graficoPDP'
+                );
+
+
+            if (canvasEl) {
+
+                const ctx =
+                    canvasEl.getContext('2d');
+
+
+                if (chartPDPInstance) {
+
+                    chartPDPInstance.destroy();
+                    chartPDPInstance = null;
+
+                }
+
+
+                chartPDPInstance =
+                    new Chart(
+                        ctx,
+                        {
+                            type: 'line',
+
+                            data: {
+
+                                labels: labelsPlot,
+
+                                datasets: [{
+
+                                    label:
+                                        'Geração Programada ONS (MW)',
+
+                                    data:
+                                        valoresPlot,
+
+                                    borderColor:
+                                        '#3b82f6',
+
+                                    backgroundColor:
+                                        'rgba(59, 130, 246, 0.05)',
+
+                                    fill: true,
+
+                                    tension: 0.3,
+
+                                    borderWidth: 2,
+
+                                    pointRadius:
+                                        (
+                                            valoresPlot[0] === 0 &&
+                                            (
+                                                !dados.total_patamares ||
+                                                dados.total_patamares === 0
+                                            )
+                                        )
+                                            ? 0
+                                            : 2,
+
+                                }]
+
+                            },
+
+                            options: {
+
+                                responsive: true,
+
+                                maintainAspectRatio: false,
+
+                                scales: {
+
+                                    x: {
+
+                                        type:
+                                            'category',
+
+                                        grid: {
+                                            color:
+                                                'rgba(128, 128, 128, 0.15)'
+                                        },
+
+                                        ticks: {
+                                            maxTicksLimit: 12
+                                        }
+
+                                    },
+
+                                    y: {
+
+                                        beginAtZero: true,
+
+                                        suggestedMax: 50,
+
+                                        grid: {
+                                            color:
+                                                'rgba(128, 128, 128, 0.15)'
+                                        },
+
+                                        title: {
+                                            display: true,
+                                            text:
+                                                'Potência Programada (MW)'
+                                        }
+
+                                    }
+
+                                },
+
+                                plugins: {
+
+                                    legend: {
+                                        position: 'bottom'
+                                    }
+
+                                }
+
+                            }
+
+                        }
+                    );
+
+            }
+
+
+        }
+
+        catch (err) {
+
+            console.error(
+                "Erro ao carregar PDP:",
+                err
+            );
+
+            if (corpo) {
+
+                corpo.innerHTML = `
+                    <tr>
+                        <td
+                            colspan="4"
+                            style="
+                                padding: 20px;
+                                text-align: center;
+                                color: #ef4444;
+                            "
+                        >
+                            Erro ao processar dados
+                            da Programação.
+                        </td>
+                    </tr>
+                `;
+
+            }
+
+        }
+
+    }
+
+
+    // =====================================================
+    // AUDITORIA
+    // =====================================================
+
+    async function carregarTabelaAuditoria() {
+        const data =
+            (typeof dataSelecionada !== 'undefined' && dataSelecionada)
+                ? dataSelecionada
+                : obterDataLocal();
+
+        const corpo = document.getElementById('tabelaAuditoriaCorpo');
+        const contador = document.getElementById('contadorHistorico');
+
+        if (!corpo) return;
+
+        corpo.innerHTML = `
+            <tr>
+                <td colspan="8" style="padding:20px;text-align:center;color:var(--text-muted);">
+                    Buscando eventos para ${data}...
+                </td>
+            </tr>
+        `;
+
+        try {
+            let res = await fetch(
+                `/api/dashboard/historico?data=${encodeURIComponent(data)}`
+            );
+
+            if (res.status === 404) {
+                res = await fetch(
+                    `/api/historico?data=${encodeURIComponent(data)}`
+                );
+            }
+
+            if (!res.ok) {
+                throw new Error(`HTTP ${res.status}`);
+            }
+
+            const eventos = await res.json();
+
+            window.eventosAuditoriaTodos = eventos;
+
+            preencherFiltroUsinasAuditoria(eventos);
+
+            console.log(
+                "Eventos recebidos para a data",
+                data,
+                eventos
+            );
+
+            aplicarFiltroAuditoria();
+
+        } catch (err) {
+            console.error("Erro ao buscar histórico:", err);
+
+            corpo.innerHTML = `
+                <tr>
+                    <td colspan="8" style="padding:20px;text-align:center;color:#ef4444;">
+                        Erro ao carregar dados. Verifique o console.
+                    </td>
+                </tr>
+            `;
+
+            if (contador) {
+                contador.innerText = "0 eventos";
+            }
+        }
+    }
+
+    function preencherFiltroUsinasAuditoria(eventos) {
+        const select = document.getElementById("filtroUsinaAuditoria");
+        if (!select) return;
+
+        const usinas = [
+            ...new Set(
+                eventos
+                    .map(evento => evento.usina)
+                    .filter(Boolean)
+            )
+        ].sort();
+
+        const selecionadas = Array.from(select.selectedOptions)
+            .map(option => option.value);
+
+        const manterTodas =
+            selecionadas.length === 0 ||
+            selecionadas.includes("todas");
+
+        select.innerHTML = "";
+
+        const todas = document.createElement("option");
+        todas.value = "todas";
+        todas.textContent = "Todas as usinas";
+        todas.selected = manterTodas;
+        select.appendChild(todas);
+
+        usinas.forEach(usina => {
+            const option = document.createElement("option");
+            option.value = usina;
+            option.textContent = usina;
+            option.selected =
+                !manterTodas &&
+                selecionadas.includes(usina);
+            select.appendChild(option);
+        });
+    }
+
+    function aplicarFiltroAuditoria() {
+        const corpo = document.getElementById('tabelaAuditoriaCorpo');
+        const contador = document.getElementById('contadorHistorico');
+        const filtro = document.getElementById('filtroUsinaAuditoria');
+
+        if (!corpo) return;
+
+        const eventos = window.eventosAuditoriaTodos || [];
+
+        const usinasSelecionadas = filtro
+            ? Array.from(filtro.selectedOptions)
+                .map(option => option.value)
+                .filter(value => value !== 'todas')
+            : [];
+
+        const eventosFiltrados =
+            usinasSelecionadas.length > 0
+                ? eventos.filter(evento =>
+                    usinasSelecionadas.includes(evento.usina)
+                )
+                : eventos;
+
+        if (contador) {
+            contador.innerText = `${eventosFiltrados.length} eventos`;
+        }
+
+        if (!eventosFiltrados.length) {
+            corpo.innerHTML = `
+                <tr>
+                    <td colspan="8" style="padding:24px;text-align:center;color:var(--text-muted);">
+                        Nenhum evento encontrado para o filtro selecionado.
+                    </td>
+                </tr>
+            `;
+
+            window.eventosAuditoria = [];
+            return;
+        }
+
+        corpo.innerHTML = eventosFiltrados.map((e, index) => {
+            const hora = e.data
+                ? formatarDataHoraBrasil(e.data)
+                : '--';
+
+            const isLiberacao = e.evento === 'LIBERACAO';
+
+            const badgeCor = isLiberacao
+                ? '#10b981'
+                : '#f59e0b';
+
+            const badgeBg = isLiberacao
+                ? 'rgba(16, 185, 129, 0.1)'
+                : 'rgba(245, 158, 11, 0.1)';
+
+            return `
+                <tr style="border-bottom:1px solid var(--border);font-family:var(--font-mono);">
+                    <td style="padding:10px 12px;">
+                        ${hora}
+                    </td>
+
+                    <td style="padding:10px 12px;font-weight:600;font-family:var(--font-data);">
+                        ${e.usina || '--'}
+                    </td>
+
+                    <td style="padding:10px 12px;">
+                        <span style="
+                            background:${badgeBg};
+                            color:${badgeCor};
+                            padding:2px 8px;
+                            border-radius:4px;
+                            font-size:11px;
+                            font-weight:600;
+                        ">
+                            ${e.evento || '--'}
+                        </span>
+                    </td>
+
+                    <td style="padding:10px 12px;">
+                        ${e.potencia_restricao ?? '--'} MW
+                    </td>
+
+                    <td style="
+                        padding:10px 12px;
+                        color:${e.corte_mw > 0 ? '#ef4444' : 'inherit'};
+                        font-weight:${e.corte_mw > 0 ? '600' : 'normal'};
+                    ">
+                        ${
+                            e.corte_mw > 0
+                                ? `-${e.corte_mw} MW`
+                                : '0 MW'
+                        }
+                    </td>
+
+                    <td style="padding:10px 12px;">
+                        ${
+                            e.tempo_resposta !== null &&
+                            e.tempo_resposta !== undefined
+                                ? `${e.tempo_resposta}s`
+                                : '--'
+                        }
+                    </td>
+
+                    <td style="padding:10px 12px;font-size:12px;color:var(--text-muted);">
+                        ${e.status || 'OK'}
+                    </td>
+
+                    <td style="padding:10px 12px;">
+                        <button
+                            type="button"
+                            class="dashboard-button"
+                            onclick="verDetalhesAuditoria(${index})"
+                            style="padding:4px 10px;font-size:11px;"
+                        >
+                            Ver
+                        </button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+        // Guarda somente os eventos atualmente exibidos
+        window.eventosAuditoria = eventosFiltrados;
+
+    }
+
+    async function gerarPdfAuditoria() {
+        const data =
+            (typeof dataSelecionada !== 'undefined' && dataSelecionada)
+                ? dataSelecionada
+                : obterDataLocal();
+
+        const select = document.getElementById("filtroUsinaAuditoria");
+        const usinas = select
+            ? Array.from(select.selectedOptions).map(option => option.value).filter(Boolean)
+            : [];
+
+        const params = new URLSearchParams();
+        params.set("data", data);
+
+        usinas.forEach(usina => {
+            if (usina !== "todas") params.append("usina", usina);
+        });
+
+        const url = `/api/dashboard/auditoria/pdf?${params.toString()}`;
+
+        console.log("📄 Abrindo PDF:", url);
+
+        window.open(url, "_blank");
+    }
+
+    function escaparHtml(valor) {
+
+        if (
+            valor === null ||
+            valor === undefined
+        ) {
+            return "";
+        }
+
+        return String(valor)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function formatarValor(valor) {
+
+        if (
+            valor === null ||
+            valor === undefined ||
+            valor === ""
+        ) {
+            return "--";
+        }
+
+        return escaparHtml(valor);
+    }
+
+    function formatarDataHoraBrasil(valor) {
+        if (!valor) {
+            return "--";
+        }
+
+        try {
+            const data = new Date(valor);
+
+            if (isNaN(data.getTime())) {
+                return valor;
+            }
+
+            return new Intl.DateTimeFormat("pt-BR", {
+                timeZone: "America/Sao_Paulo",
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false
+            }).format(data);
+
+        } catch (erro) {
+            console.error("Erro ao formatar data:", erro);
+            return valor;
+        }
+    }
+
+    function verDetalhesAuditoria(index) {
+
+        const eventos =
+            window.eventosAuditoria || [];
+
+        const evento =
+            eventos[index];
+
+        if (!evento) {
+
+            console.error(
+                "Evento de auditoria não encontrado:",
+                index
+            );
+
+            return;
+        }
+
+
+        const modal =
+            document.getElementById(
+                "modalAuditoriaDetalhes"
+            );
+
+        const titulo =
+            document.getElementById(
+                "tituloAuditoriaDetalhes"
+            );
+
+        const corpo =
+            document.getElementById(
+                "corpoAuditoriaDetalhes"
+            );
+
+
+        if (!modal || !corpo) {
+            return;
+        }
+
+
+        titulo.innerText =
+            `Evento #${evento.id || '--'} · ${evento.usina || 'SISTEMA'}`;
+
+
+        corpo.innerHTML = `
+
+            <div
+                style="
+                    display: grid;
+                    grid-template-columns:
+                        repeat(auto-fit, minmax(220px, 1fr));
+                    gap: 12px;
+                "
+            >
+
+                <div class="card" style="padding: 12px;">
+
+                    <div class="stat-label">
+                        Data / Hora
+                    </div>
+
+                    <div
+                        style="
+                            margin-top: 5px;
+                            font-family: var(--font-mono);
+                        "
+                    >
+                        ${formatarDataHoraBrasil(evento.data)}
+                    </div>
+
+                </div>
+
+
+                <div class="card" style="padding: 12px;">
+
+                    <div class="stat-label">
+                        Usina
+                    </div>
+
+                    <div style="margin-top: 5px;">
+                        ${formatarValor(evento.usina)}
+                    </div>
+
+                </div>
+
+
+                <div class="card" style="padding: 12px;">
+
+                    <div class="stat-label">
+                        Evento
+                    </div>
+
+                    <div style="margin-top: 5px;">
+                        ${formatarValor(evento.evento)}
+                    </div>
+
+                </div>
+
+
+                <div class="card" style="padding: 12px;">
+
+                    <div class="stat-label">
+                        Status
+                    </div>
+
+                    <div style="margin-top: 5px;">
+                        ${formatarValor(evento.status)}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div style="margin-top: 18px;">
+
+                <div class="stat-label">
+                    Motivo
+                </div>
+
+                <div
+                    style="
+                        margin-top: 6px;
+                        padding: 12px;
+                        background: var(--surface);
+                        border: 1px solid var(--border);
+                        border-radius: 6px;
+                        white-space: pre-wrap;
+                        line-height: 1.5;
+                    "
+                >
+                    ${formatarValor(evento.motivo)}
+                </div>
+
+            </div>
+
+
+            <div style="margin-top: 14px;">
+
+                <div class="stat-label">
+                    Informação adicional
+                </div>
+
+                <div
+                    style="
+                        margin-top: 6px;
+                        padding: 12px;
+                        background: var(--surface);
+                        border: 1px solid var(--border);
+                        border-radius: 6px;
+                        white-space: pre-wrap;
+                        line-height: 1.5;
+                    "
+                >
+                    ${formatarValor(
+                        evento.informacao_adicional
+                    )}
+                </div>
+
+            </div>
+
+
+            <div style="margin-top: 14px;">
+
+                <div class="stat-label">
+                    Mensagem recebida
+                </div>
+
+                <div
+                    style="
+                        margin-top: 6px;
+                        padding: 12px;
+                        background: var(--surface);
+                        border: 1px solid var(--border);
+                        border-radius: 6px;
+                        white-space: pre-wrap;
+                        line-height: 1.5;
+                    "
+                >
+                    ${formatarValor(evento.mensagem)}
+                </div>
+
+            </div>
+
+
+            <div
+                style="
+                    display: grid;
+                    grid-template-columns:
+                        repeat(auto-fit, minmax(180px, 1fr));
+                    gap: 12px;
+                    margin-top: 18px;
+                "
+            >
+
+                <div>
+
+                    <div class="stat-label">
+                        Potência observada
+                    </div>
+
+                    <div
+                        style="
+                            margin-top: 4px;
+                            font-family: var(--font-mono);
+                        "
+                    >
+                        ${
+                            evento.potencia_observada !== null &&
+                            evento.potencia_observada !== undefined
+                                ? `${evento.potencia_observada} MW`
+                                : '--'
+                        }
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="stat-label">
+                        Limite
+                    </div>
+
+                    <div
+                        style="
+                            margin-top: 4px;
+                            font-family: var(--font-mono);
+                        "
+                    >
+                        ${formatarValor(
+                            evento.potencia_restricao
+                        )} MW
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="stat-label">
+                        Corte
+                    </div>
+
+                    <div
+                        style="
+                            margin-top: 4px;
+                            font-family: var(--font-mono);
+                        "
+                    >
+                        ${formatarValor(
+                            evento.corte_mw
+                        )} MW
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="stat-label">
+                        Tempo de resposta
+                    </div>
+
+                    <div
+                        style="
+                            margin-top: 4px;
+                            font-family: var(--font-mono);
+                        "
+                    >
+                        ${
+                            evento.tempo_resposta !== null &&
+                            evento.tempo_resposta !== undefined
+                                ? `${evento.tempo_resposta}s`
+                                : '--'
+                        }
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                style="
+                    margin-top: 20px;
+                    padding-top: 14px;
+                    border-top: 1px solid var(--border);
+                    font-size: 12px;
+                    color: var(--text-muted);
+                    font-family: var(--font-mono);
+                "
+            >
+
+                <div>
+                    Origem:
+                    ${formatarValor(evento.origem)}
+                </div>
+
+                <div style="margin-top: 4px;">
+                    Destino:
+                    ${formatarValor(evento.destino)}
+                </div>
+
+                <div style="margin-top: 4px;">
+                    Código:
+                    ${formatarValor(evento.codigo)}
+                </div>
+
+                <div style="margin-top: 4px;">
+                    ID Local Operação:
+                    ${formatarValor(
+                        evento.id_local_operacao
+                    )}
+                </div>
+
+                <div style="margin-top: 4px;">
+                    Recebido:
+                    ${formatarValor(
+                        evento.data_recebimento
+                    )}
+                </div>
+
+                <div style="margin-top: 4px;">
+                    Atualizado:
+                    ${formatarValor(
+                        evento.data_atualizacao
+                    )}
+                </div>
+
+            </div>
+
+        `;
+
+
+        modal.classList.add("active");
+
+        // Compatibilidade caso o CSS use display em vez de .active
+        modal.style.display = "flex";
+    }
+
+
+    function fecharDetalhesAuditoria() {
+
+        const modal =
+            document.getElementById(
+                "modalAuditoriaDetalhes"
+            );
+
+        if (!modal) {
+            return;
+        }
+
+        modal.classList.remove("active");
+        modal.style.display = "none";
+    }
+
+    // =====================================================
+    // DETALHES DA AUDITORIA
+    // =====================================================
+
+    function mostrarDetalhesAuditoria(index) {
+
+        const evento =
+            window.eventosAuditoria?.[index];
+
+
+        if (!evento) {
+            return;
+        }
+
+
+        const modal =
+            document.getElementById(
+                'modalHistorico'
+            );
+
+        const titulo =
+            document.getElementById(
+                'tituloHistorico'
+            );
+
+        const corpo =
+            document.getElementById(
+                'corpoHistorico'
+            );
+
+
+        if (!modal || !titulo || !corpo) {
+            return;
+        }
+
+
+        titulo.innerText =
+            `Detalhes do Evento · ${evento.usina || 'SISTEMA'}`;
+
+
+        const motivo =
+            evento.motivo ||
+            'Não informado';
+
+
+        const informacao =
+            evento.informacao_adicional ||
+            'Não informada';
+
+
+        const mensagem =
+            evento.mensagem ||
+            'Não informada';
+
+
+        const dataEvento =
+            evento.data ||
+            '--';
+
+
+        const tempoResposta =
+            (
+                evento.tempo_resposta !== null &&
+                evento.tempo_resposta !== undefined
+            )
+                ? `${evento.tempo_resposta}s`
+                : '--';
+
+
+        corpo.innerHTML = `
+
+            <div
+                style="
+                    display: grid;
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                    gap: 12px;
+                    margin-bottom: 20px;
+                "
+            >
+
+                <div>
+
+                    <div class="stat-label">
+                        Data / Hora
+                    </div>
+
+                    <div
+                        style="
+                            font-family: var(--font-mono);
+                            font-size: 13px;
+                            margin-top: 4px;
+                        "
+                    >
+                        ${dataEvento}
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="stat-label">
+                        Evento
+                    </div>
+
+                    <div
+                        style="
+                            font-family: var(--font-mono);
+                            font-size: 13px;
+                            margin-top: 4px;
+                        "
+                    >
+                        ${evento.evento || '--'}
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="stat-label">
+                        Status
+                    </div>
+
+                    <div
+                        style="
+                            font-family: var(--font-mono);
+                            font-size: 13px;
+                            margin-top: 4px;
+                        "
+                    >
+                        ${evento.status || '--'}
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="stat-label">
+                        Tempo de Resposta
+                    </div>
+
+                    <div
+                        style="
+                            font-family: var(--font-mono);
+                            font-size: 13px;
+                            margin-top: 4px;
+                        "
+                    >
+                        ${tempoResposta}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                style="
+                    border-top: 1px solid var(--border);
+                    padding-top: 16px;
+                "
+            >
+
+                <div class="stat-label">
+                    Motivo
+                </div>
+
+                <div
+                    style="
+                        margin-top: 6px;
+                        padding: 10px 12px;
+                        background: var(--surface);
+                        border: 1px solid var(--border);
+                        border-radius: 6px;
+                        line-height: 1.5;
+                        white-space: pre-wrap;
+                    "
+                >
+                    ${motivo}
+                </div>
+
+
+                <div
+                    class="stat-label"
+                    style="
+                        margin-top: 16px;
+                    "
+                >
+                    Informação adicional
+                </div>
+
+                <div
+                    style="
+                        margin-top: 6px;
+                        padding: 10px 12px;
+                        background: var(--surface);
+                        border: 1px solid var(--border);
+                        border-radius: 6px;
+                        line-height: 1.5;
+                        white-space: pre-wrap;
+                    "
+                >
+                    ${informacao}
+                </div>
+
+
+                <div
+                    class="stat-label"
+                    style="
+                        margin-top: 16px;
+                    "
+                >
+                    Mensagem recebida do SINAPSE
+                </div>
+
+                <div
+                    style="
+                        margin-top: 6px;
+                        padding: 10px 12px;
+                        background: var(--surface);
+                        border: 1px solid var(--border);
+                        border-radius: 6px;
+                        line-height: 1.5;
+                        white-space: pre-wrap;
+                        font-family: var(--font-data);
+                        font-size: 13px;
+                    "
+                >
+                    ${mensagem}
+                </div>
+
+            </div>
+
+        `;
+
+
+        modal.classList.add(
+            'active'
+        );
+
+    }
+
+
+    // =====================================================
+    // FECHAR MODAL
+    // =====================================================
+
+    function fecharHistorico() {
+
+        const modal =
+            document.getElementById(
+                'modalHistorico'
+            );
+
+
+        if (!modal) {
+            return;
+        }
+
+
+        modal.classList.remove(
+            'active'
+        );
+
+    }
+
+
+    // Fecha clicando fora do conteúdo
+    document.addEventListener(
+        'click',
+        function (event) {
+
+            const modal =
+                document.getElementById(
+                    'modalHistorico'
+                );
+
+
+            if (
+                modal &&
+                event.target === modal
+            ) {
+
+                fecharHistorico();
+
+            }
+
+        }
+    );
+
+
+    // Fecha com ESC
+    document.addEventListener(
+        'keydown',
+        function (event) {
+
+            if (
+                event.key === 'Escape'
+            ) {
+
+                fecharHistorico();
+
+            }
+
+        }
+    );
+
+
+</script>
+
+
+<!-- =========================================================
+     JAVASCRIPT DOS MÓDULOS
+     ========================================================= -->
+
+<script src="/dashboard/static/js/usinas.js"></script>
+
+<script src="/dashboard/static/js/graficos.js"></script>
+
+<script src="/dashboard/static/js/dashboard.js"></script>
+
+<script src="/dashboard/static/js/websocket.js"></script>
+
+
+</body>
+
+</html>

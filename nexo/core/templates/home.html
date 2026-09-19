@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXO</title>
+
+    <!-- =====================================================
+         FONTES
+         ===================================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* =====================================================
+           VARIÁVEIS
+           ===================================================== */
+        :root {
+            --font-ui: "Geist", sans-serif;
+            --font-data: "IBM Plex Sans", sans-serif;
+            --font-mono: "IBM Plex Mono", monospace;
+
+            --nexo-blue: #08314A;
+
+            --bg: #f3f5f6;
+            --surface: #ffffff;
+            --surface-hover: #fafbfb;
+            --border: #dfe3e6;
+            --border-hover: #c5cbd0;
+
+            --text: #161a1d;
+            --text-secondary: #4b555e;
+            --text-muted: #68727b;
+
+            --shadow: rgba(0, 0, 0, 0.05);
+        }
+
+        /* =====================================================
+           MODO ESCURO
+           ===================================================== */
+        [data-theme="dark"] {
+            --bg: #101518;
+            --surface: #171d21;
+            --surface-hover: #1c2328;
+            --border: #293238;
+            --border-hover: #3a454c;
+
+            --text: #f1f4f5;
+            --text-secondary: #b4bdc3;
+            --text-muted: #87939b;
+
+            --shadow: rgba(0, 0, 0, 0.22);
+        }
+
+        /* =====================================================
+           BASE
+           ===================================================== */
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            color-scheme: light;
+        }
+
+        html[data-theme="dark"] {
+            color-scheme: dark;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: var(--font-ui);
+            background: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        /* =====================================================
+           LAYOUT
+           ===================================================== */
+        .page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* =====================================================
+           HEADER
+           ===================================================== */
+        .header {
+            height: 48px;
+            flex-shrink: 0;
+            background: var(--nexo-blue);
+            color: #f4f7f9;
+        }
+
+        .header-content {
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            margin: 0;
+            font-size: 17px;
+            line-height: 1;
+            font-weight: 650;
+            letter-spacing: -0.25px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .datetime {
+            font-family: var(--font-data);
+            font-size: 11px;
+            font-weight: 500;
+            color: rgba(244, 247, 249, 0.88);
+            letter-spacing: 0.15px;
+            white-space: nowrap;
+        }
+
+        .theme-button {
+            width: 27px;
+            height: 27px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.06);
+            color: #f4f7f9;
+            font-family: var(--font-ui);
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+
+        .theme-button:hover {
+            background: rgba(255, 255, 255, 0.13);
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+
+        /* =====================================================
+           CONTEÚDO
+           ===================================================== */
+        .content {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 42px 36px 52px;
+        }
+
+        .page-heading {
+            margin-bottom: 34px;
+        }
+
+        .page-title {
+            margin: 0;
+            font-size: 27px;
+            line-height: 1.2;
+            font-weight: 650;
+            letter-spacing: -0.65px;
+        }
+
+        .page-subtitle {
+            margin: 8px 0 0;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+        }
+
+        /* =====================================================
+           SEÇÕES
+           ===================================================== */
+        .section {
+            margin-top: 40px;
+        }
+
+        .section-header {
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            margin: 0;
+            font-size: 12px;
+            font-weight: 650;
+            text-transform: uppercase;
+            letter-spacing: 0.85px;
+            color: var(--text-secondary);
+        }
+
+        .section-subtitle {
+            margin: 5px 0 0;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* =====================================================
+           GRID DE MÓDULOS
+           ===================================================== */
+        .modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        /* =====================================================
+           CARD
+           ===================================================== */
+        .module {
+            position: relative;
+            min-height: 185px;
+            display: flex;
+            flex-direction: column;
+            padding: 23px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            text-decoration: none;
+            color: inherit;
+            transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .module:hover {
+            background: var(--surface-hover);
+            border-color: var(--border-hover);
+            box-shadow: 0 4px 16px var(--shadow);
+        }
+
+        .module-code {
+            margin-bottom: 27px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.45px;
+            color: var(--text-muted);
+        }
+
+        .module-title {
+            margin: 0 0 7px;
+            font-size: 18px;
+            line-height: 1.25;
+            font-weight: 600;
+            letter-spacing: -0.25px;
+        }
+
+        .module-description {
+            max-width: 480px;
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.55;
+            color: var(--text-secondary);
+        }
+
+        .module-footer {
+            margin-top: auto;
+            padding-top: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .arrow {
+            font-size: 17px;
+            transition: transform 0.15s ease, color 0.15s ease;
+        }
+
+        .module:hover .arrow {
+            transform: translateX(4px);
+            color: var(--text);
+        }
+
+        /* =====================================================
+           INTEGRAÇÃO
+           ===================================================== */
+        .api-section {
+            margin-top: 46px;
+        }
+
+        .api-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 17px 19px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+        }
+
+        .api-info {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .api-label {
+            font-size: 10px;
+            font-weight: 650;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .api-info code {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .copy-button {
+            flex-shrink: 0;
+            padding: 7px 13px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            background: var(--surface);
+            color: var(--text-secondary);
+            font-family: var(--font-ui);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+
+        .copy-button:hover {
+            background: var(--surface-hover);
+            border-color: var(--border-hover);
+        }
+
+        /* =====================================================
+           FOOTER
+           ===================================================== */
+        .footer {
+            margin-top: auto;
+            padding: 18px 32px;
+            border-top: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-muted);
+            font-family: var(--font-data);
+            font-size: 10px;
+            text-align: center;
+        }
+
+        /* =====================================================
+           RESPONSIVO
+           ===================================================== */
+        @media (max-width: 700px) {
+            .header-content {
+                padding: 0 18px;
+            }
+
+            .datetime {
+                font-size: 10px;
+            }
+
+            .header-right {
+                gap: 10px;
+            }
+
+            .content {
+                padding: 32px 18px 42px;
+            }
+
+            .page-title {
+                font-size: 23px;
+            }
+
+            .modules {
+                grid-template-columns: 1fr;
+            }
+
+            .api-card {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .copy-button {
+                width: 100%;
+            }
+
+            .footer {
+                padding: 17px 18px;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .datetime {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="page">
+{% set modulo = "HUB OPERACIONAL" %}
+{% include "header.html" %}
+
+    <!-- =====================================================
+         CONTEÚDO
+         ===================================================== -->
+    <main class="content">
+
+        <div class="page-heading">
+            <h2 class="page-title">Módulos e recursos disponíveis</h2>
+        </div>
+
+        <!-- =================================================
+             MÓDULOS
+             ================================================= -->
+        <section class="section">
+            <div class="section-header">
+                <h3 class="section-title">Módulos</h3>
+            </div>
+
+                        <div class="modules">
+                {% for m in modulos %}
+                <a href="{{ m.url }}" class="module">
+                    <div class="module-code">{{ m.codigo }}</div>
+                    <h4 class="module-title">{{ m.titulo }}</h4>
+                    <p class="module-description">{{ m.descricao }}</p>
+                    <div class="module-footer">
+                        <span>Acessar módulo</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </a>
+                {% else %}
+                <p style="color: var(--text-muted); font-size: 13px;">Nenhum módulo disponível no momento.</p>
+                {% endfor %}
+            </div>
+
+        </section>
+
+            <!-- =================================================
+        INTEGRAÇÃO (DINÂMICA)
+        ================================================= -->
+        {% if integracoes %}
+        <section class="api-section">
+            {% for item in integracoes %}
+            <div class="section-header">
+                <h3 class="section-title">{{ item.titulo or 'Integração' }}</h3>
+                {% if item.subtitulo %}
+                <p class="section-subtitle">{{ item.subtitulo }}</p>
+                {% endif %}
+            </div>
+
+            <div class="api-card">
+                <div class="api-info">
+                    <span class="api-label">{{ item.label }}</span>
+                    <code id="apiCode_{{ loop.index }}">
+                        {{ request.base_url }}{{ item.path.lstrip('/') }}
+                    </code>
+                </div>
+
+                <button
+                    class="copy-button"
+                    onclick="copiarApi('apiCode_{{ loop.index }}', this)"
+                    type="button"
+                >
+                    Copiar
+                </button>
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+
+    </main>
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+    <footer class="footer">
+        <div>NEXO · Núcleo de Execução Operacional</div>
+    <div>
+        Criado por <a href="https://github.com/YuriTheHenrique/" target="_blank" rel="noopener noreferrer">Yuri Henrique</a>
+    </div>
+    </footer>
+
+</div>
+
+<script>
+    /* =========================================================
+       COPIAR API
+       ========================================================= */
+
+    function copiarApi(idElemento, botao) {
+        const elemento = document.getElementById(idElemento);
+        if (!elemento) return;
+
+        const url = elemento.textContent.trim();
+        navigator.clipboard.writeText(url);
+
+        const textoOriginal = botao.textContent;
+        botao.textContent = "Copiado";
+
+        setTimeout(() => {
+            botao.textContent = textoOriginal;
+        }, 1500);
+    }
+
+        /* =========================================================
+       EASTER EGG · TETRIS
+       ========================================================= */
+
+    let tetrisSequence = "";
+    let tetrisTimer = null;
+
+    document.addEventListener("keydown", (event) => {
+
+        // Ignora teclas modificadoras
+        if (
+            event.ctrlKey ||
+            event.altKey ||
+            event.metaKey
+        ) {
+            return;
+        }
+
+        // Aceita apenas caracteres
+        if (event.key.length !== 1) {
+            return;
+        }
+
+        tetrisSequence += event.key.toUpperCase();
+
+        // Mantém somente os últimos 6 caracteres
+        if (tetrisSequence.length > 6) {
+            tetrisSequence =
+                tetrisSequence.slice(-6);
+        }
+
+        // TETRIS digitado
+        if (tetrisSequence === "TETRIS") {
+            window.location.href = "/tetris";
+            return;
+        }
+
+        // Limpa a sequência depois de um pequeno intervalo
+        clearTimeout(tetrisTimer);
+
+        tetrisTimer = setTimeout(() => {
+            tetrisSequence = "";
+        }, 2000);
+    });
+
+</script>
+
+</body>
+</html>

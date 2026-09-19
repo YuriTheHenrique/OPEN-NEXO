@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NEXO | {% block title %}{{ titulo or 'Sistema' }}{% endblock %}</title>
+
+    <!-- =====================================================
+         FONTES
+         ===================================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        /* =====================================================
+           VARIÁVEIS
+           ===================================================== */
+
+        :root {
+            --font-ui: "Geist", sans-serif;
+            --font-data: "IBM Plex Sans", sans-serif;
+            --font-mono: "IBM Plex Mono", monospace;
+
+            --nexo-blue: #08314A;
+
+            --bg: #f3f5f6;
+            --surface: #ffffff;
+            --surface-hover: #fafbfb;
+
+            --border: #dfe3e6;
+            --border-hover: #c5cbd0;
+
+            --input-border: #cfd5d9;
+            --input-focus: #08314A;
+
+            --text: #161a1d;
+            --text-secondary: #4b555e;
+            --text-muted: #68727b;
+
+            --shadow: rgba(0, 0, 0, 0.05);
+
+            --success-bg: #edf8f1;
+            --success-border: #b8dfc8;
+            --success-text: #176b3a;
+
+            --error-bg: #fdf0f0;
+            --error-border: #ecc4c4;
+            --error-text: #9b2c2c;
+
+            --switch-off: #c6cdd2;
+            --switch-on: #08314A;
+        }
+
+
+        /* =====================================================
+           MODO ESCURO
+           ===================================================== */
+
+        [data-theme="dark"] {
+            --bg: #101518;
+            --surface: #171d21;
+            --surface-hover: #1c2328;
+
+            --border: #293238;
+            --border-hover: #3a454c;
+
+            --input-border: #3a454c;
+            --input-focus: #7fa9bd;
+
+            --text: #f1f4f5;
+            --text-secondary: #b4bdc3;
+            --text-muted: #87939b;
+
+            --shadow: rgba(0, 0, 0, 0.22);
+
+            --success-bg: #0f291e;
+            --success-border: #1d4d38;
+            --success-text: #7ee0aa;
+
+            --error-bg: #2d1414;
+            --error-border: #522424;
+            --error-text: #f09595;
+
+            --switch-off: #3a454c;
+            --switch-on: #4a7d97;
+        }
+
+
+        /* =====================================================
+           BASE
+           ===================================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            color-scheme: light;
+        }
+
+        html[data-theme="dark"] {
+            color-scheme: dark;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            font-family: var(--font-ui);
+
+            background: var(--bg);
+            color: var(--text);
+
+            -webkit-font-smoothing: antialiased;
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease;
+        }
+
+
+        /* =====================================================
+           LAYOUT
+           ===================================================== */
+
+        .page {
+            min-height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        /* =====================================================
+           HEADER
+           ===================================================== */
+
+        .header {
+            height: 48px;
+
+            flex-shrink: 0;
+
+            background: var(--nexo-blue);
+            color: #f4f7f9;
+        }
+
+        .header-content {
+            width: 100%;
+            height: 100%;
+
+            padding: 0 32px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            min-width: 0;
+
+            display: flex;
+            align-items: center;
+
+            gap: 14px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+
+            gap: 6px;
+
+            color: #f4f7f9;
+
+            text-decoration: none;
+
+            font-size: 17px;
+            line-height: 1;
+            font-weight: 650;
+
+            letter-spacing: -0.25px;
+
+            transition: opacity 0.15s ease;
+        }
+
+        .back-link:hover {
+            opacity: 0.82;
+        }
+
+        .back-arrow {
+            font-size: 17px;
+            line-height: 1;
+            font-weight: 400;
+        }
+
+        .header-divider {
+            width: 1px;
+            height: 18px;
+
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .module-name {
+            font-size: 12px;
+            font-weight: 600;
+
+            letter-spacing: 0.65px;
+            text-transform: uppercase;
+
+            white-space: nowrap;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+
+            gap: 18px;
+        }
+
+        .datetime {
+            font-family: var(--font-data);
+
+            font-size: 11px;
+            font-weight: 500;
+
+            color: rgba(244, 247, 249, 0.88);
+
+            letter-spacing: 0.15px;
+
+            white-space: nowrap;
+        }
+
+        .theme-button {
+            width: 27px;
+            height: 27px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 0;
+
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 5px;
+
+            background: rgba(255, 255, 255, 0.06);
+            color: #f4f7f9;
+
+            font-family: var(--font-ui);
+            font-size: 13px;
+
+            cursor: pointer;
+
+            transition:
+                background 0.15s ease,
+                border-color 0.15s ease;
+        }
+
+        .theme-button:hover {
+            background: rgba(255, 255, 255, 0.13);
+
+            border-color:
+                rgba(255, 255, 255, 0.35);
+        }
+
+
+        /* =====================================================
+           CONTEÚDO
+           ===================================================== */
+
+        .content {
+            width: 100%;
+            max-width: 1600px;
+
+            margin: 0 auto;
+
+            padding: 42px 36px 52px;
+        }
+
+    </style>
+
+    {% block extra_head %}{% endblock %}
+</head>
+
+
+<body>
+
+<div class="page">
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="header">
+
+        <div class="header-content">
+
+            <div class="header-left">
+
+                <a
+                    href="/"
+                    class="back-link"
+                >
+                    <span class="back-arrow">←</span>
+                    <span>NEXO</span>
+                </a>
+
+                <span class="header-divider"></span>
+
+                <span class="module-name">
+                    {% block module_name %}{{ modulo or 'ATIVOS / NOVO' }}{% endblock %}
+                </span>
+
+            </div>
+
+
+            <div class="header-right">
+
+                <time
+                    class="datetime"
+                    id="currentDateTime"
+                ></time>
+
+                <button
+                    class="theme-button"
+                    id="themeButton"
+                    type="button"
+                    title="Alternar tema"
+                    aria-label="Alternar tema"
+                >☾</button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         CONTEÚDO DO MÓDULO
+         ===================================================== -->
+
+    <main class="content">
+
+        {% block content %}{% endblock %}
+
+    </main>
+
+
+</div>
+
+
+<script>
+
+    /* =========================================================
+       DATA E HORA: DD DE MMM DE YYYY · HH:MM:SS
+       ========================================================= */
+
+    function atualizarDataHora() {
+
+        const agora = new Date();
+
+        const dia = agora.getDate().toString().padStart(2, "0");
+        const mes = agora
+            .toLocaleDateString("pt-BR", { month: "short" })
+            .replace(".", "")
+            .toUpperCase();
+        const ano = agora.getFullYear();
+
+        const hora = agora.toLocaleTimeString(
+            "pt-BR",
+            {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+            }
+        );
+
+        const el = document.getElementById("currentDateTime");
+        if (el) {
+            el.textContent = `${dia} DE ${mes} DE ${ano} · ${hora}`;
+        }
+    }
+
+
+    atualizarDataHora();
+
+    setInterval(
+        atualizarDataHora,
+        1000
+    );
+
+
+    /* =========================================================
+       TEMA
+       ========================================================= */
+
+    const themeButton =
+        document.getElementById(
+            "themeButton"
+        );
+
+
+    function aplicarTema(tema) {
+
+        document.documentElement.dataset.theme =
+            tema;
+
+        if (themeButton) {
+            themeButton.textContent =
+                tema === "dark"
+                    ? "☼"
+                    : "☾";
+        }
+
+        localStorage.setItem(
+            "nexo-theme",
+            tema
+        );
+    }
+
+
+    const temaSalvo =
+        localStorage.getItem(
+            "nexo-theme"
+        );
+
+
+    if (temaSalvo) {
+
+        aplicarTema(
+            temaSalvo
+        );
+
+    } else {
+
+        aplicarTema(
+            "light"
+        );
+    }
+
+
+    if (themeButton) {
+        themeButton.addEventListener(
+            "click",
+            () => {
+
+                const temaAtual =
+                    document.documentElement
+                        .dataset
+                        .theme;
+
+                aplicarTema(
+                    temaAtual === "dark"
+                        ? "light"
+                        : "dark"
+                );
+            }
+        );
+    }
+
+</script>
+
+{% block scripts %}{% endblock %}
+
+</body>
+
+</html>

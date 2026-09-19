@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NEXO | Novo Ativo</title>
+
+    <!-- =====================================================
+         FONTES
+         ===================================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        /* =====================================================
+           VARIÁVEIS
+           ===================================================== */
+
+        :root {
+            --font-ui: "Geist", sans-serif;
+            --font-data: "IBM Plex Sans", sans-serif;
+            --font-mono: "IBM Plex Mono", monospace;
+
+            --nexo-blue: #08314A;
+
+            --bg: #f3f5f6;
+            --surface: #ffffff;
+            --surface-hover: #fafbfb;
+
+            --border: #dfe3e6;
+            --border-hover: #c5cbd0;
+
+            --input-border: #cfd5d9;
+            --input-focus: #08314A;
+
+            --text: #161a1d;
+            --text-secondary: #4b555e;
+            --text-muted: #68727b;
+
+            --shadow: rgba(0, 0, 0, 0.05);
+
+            --success-bg: #edf8f1;
+            --success-border: #b8dfc8;
+            --success-text: #176b3a;
+
+            --error-bg: #fdf0f0;
+            --error-border: #ecc4c4;
+            --error-text: #9b2c2c;
+
+            --switch-off: #c6cdd2;
+            --switch-on: #08314A;
+        }
+
+
+        /* =====================================================
+           MODO ESCURO
+           ===================================================== */
+
+        [data-theme="dark"] {
+            --bg: #101518;
+            --surface: #171d21;
+            --surface-hover: #1c2328;
+
+            --border: #293238;
+            --border-hover: #3a454c;
+
+            --input-border: #3a454c;
+            --input-focus: #7fa9bd;
+
+            --text: #f1f4f5;
+            --text-secondary: #b4bdc3;
+            --text-muted: #87939b;
+
+            --shadow: rgba(0, 0, 0, 0.22);
+
+            --success-bg: #173225;
+            --success-border: #285c40;
+            --success-text: #78c99a;
+
+            --error-bg: #351e20;
+            --error-border: #673234;
+            --error-text: #e59a9a;
+
+            --switch-off: #4a555c;
+            --switch-on: #4b91b2;
+        }
+
+
+        /* =====================================================
+           BASE
+           ===================================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            color-scheme: light;
+        }
+
+        html[data-theme="dark"] {
+            color-scheme: dark;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            font-family: var(--font-ui);
+
+            background: var(--bg);
+            color: var(--text);
+
+            -webkit-font-smoothing: antialiased;
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease;
+        }
+
+
+        /* =====================================================
+           LAYOUT
+           ===================================================== */
+
+        .page {
+            min-height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        /* =====================================================
+           HEADER
+           ===================================================== */
+
+        .header {
+            height: 48px;
+            flex-shrink: 0;
+
+            background: var(--nexo-blue);
+            color: #f4f7f9;
+        }
+
+        .header-content {
+            width: 100%;
+            height: 100%;
+
+            padding: 0 32px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            min-width: 0;
+
+            display: flex;
+            align-items: center;
+
+            gap: 14px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+
+            color: #f4f7f9;
+
+            text-decoration: none;
+
+            font-size: 17px;
+            line-height: 1;
+            font-weight: 650;
+
+            letter-spacing: -0.25px;
+
+            transition: opacity 0.15s ease;
+        }
+
+        .back-link:hover {
+            opacity: 0.82;
+        }
+
+        .back-arrow {
+            font-size: 17px;
+            line-height: 1;
+            font-weight: 400;
+        }
+
+        .header-divider {
+            width: 1px;
+            height: 18px;
+
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .module-name {
+            font-size: 12px;
+            font-weight: 600;
+
+            letter-spacing: 0.65px;
+            text-transform: uppercase;
+
+            white-space: nowrap;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+
+            gap: 18px;
+        }
+
+        .datetime {
+            font-family: var(--font-data);
+
+            font-size: 11px;
+            font-weight: 500;
+
+            color: rgba(244, 247, 249, 0.88);
+
+            letter-spacing: 0.15px;
+
+            white-space: nowrap;
+        }
+
+        .theme-button {
+            width: 27px;
+            height: 27px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 0;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.22);
+
+            border-radius: 5px;
+
+            background:
+                rgba(255, 255, 255, 0.06);
+
+            color: #f4f7f9;
+
+            font-family: var(--font-ui);
+            font-size: 13px;
+
+            cursor: pointer;
+
+            transition:
+                background 0.15s ease,
+                border-color 0.15s ease;
+        }
+
+        .theme-button:hover {
+            background:
+                rgba(255, 255, 255, 0.13);
+
+            border-color:
+                rgba(255, 255, 255, 0.35);
+        }
+
+
+        /* =====================================================
+           CONTEÚDO
+           ===================================================== */
+
+        .content {
+            width: 100%;
+            max-width: 1000px;
+
+            margin: 0 auto;
+
+            padding: 42px 36px 52px;
+        }
+
+        .page-heading {
+            margin-bottom: 28px;
+        }
+
+        .page-title {
+            margin: 0;
+
+            font-size: 27px;
+            line-height: 1.2;
+
+            font-weight: 650;
+
+            letter-spacing: -0.65px;
+        }
+
+        .page-subtitle {
+            margin: 8px 0 0;
+
+            font-size: 13px;
+            line-height: 1.5;
+
+            color: var(--text-secondary);
+        }
+
+
+        /* =====================================================
+           MENSAGEM
+           ===================================================== */
+
+        .mensagem {
+            display: none;
+
+            margin-bottom: 18px;
+
+            padding: 11px 13px;
+
+            border-radius: 6px;
+
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .mensagem.sucesso {
+            display: block;
+
+            background: var(--success-bg);
+            border: 1px solid var(--success-border);
+
+            color: var(--success-text);
+        }
+
+        .mensagem.erro {
+            display: block;
+
+            background: var(--error-bg);
+            border: 1px solid var(--error-border);
+
+            color: var(--error-text);
+        }
+
+
+        /* =====================================================
+           CARD PRINCIPAL
+           ===================================================== */
+
+        .card {
+            background: var(--surface);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 7px;
+
+            padding: 26px;
+
+            box-shadow:
+                0 2px 10px var(--shadow);
+        }
+
+
+        /* =====================================================
+           FORMULÁRIO
+           ===================================================== */
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 19px 18px;
+        }
+
+        .campo {
+            display: flex;
+            flex-direction: column;
+
+            gap: 7px;
+        }
+
+        .campo-completo {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 11px;
+            font-weight: 600;
+
+            color: var(--text-secondary);
+        }
+
+        input,
+        select {
+            width: 100%;
+            height: 40px;
+
+            padding: 0 11px;
+
+            border:
+                1px solid var(--input-border);
+
+            border-radius: 5px;
+
+            background: var(--surface);
+            color: var(--text);
+
+            font-family: var(--font-ui);
+            font-size: 13px;
+
+            outline: none;
+
+            transition:
+                border-color 0.15s ease,
+                box-shadow 0.15s ease;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--input-focus);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(8, 49, 74, 0.10);
+        }
+
+        [data-theme="dark"] input:focus,
+        [data-theme="dark"] select:focus {
+            box-shadow:
+                0 0 0 3px
+                rgba(127, 169, 189, 0.12);
+        }
+
+        input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .ajuda {
+            margin-top: 1px;
+
+            color: var(--text-muted);
+
+            font-size: 10px;
+            line-height: 1.4;
+        }
+
+
+        /* =====================================================
+           STATUS
+           ===================================================== */
+
+        .campo-checkbox {
+            min-height: 42px;
+
+            padding: 9px 11px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 18px;
+
+            border:
+                1px solid var(--input-border);
+
+            border-radius: 5px;
+
+            background: var(--surface);
+        }
+
+        .checkbox-info {
+            display: flex;
+            flex-direction: column;
+
+            gap: 2px;
+        }
+
+        .checkbox-info strong {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .checkbox-info span {
+            color: var(--text-muted);
+
+            font-size: 10px;
+        }
+
+        .checkbox {
+            position: relative;
+
+            width: 40px;
+            height: 22px;
+
+            flex-shrink: 0;
+        }
+
+        .checkbox input {
+            position: absolute;
+
+            opacity: 0;
+
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            inset: 0;
+
+            cursor: pointer;
+
+            background: var(--switch-off);
+
+            border-radius: 20px;
+
+            transition:
+                background 0.2s ease;
+        }
+
+        .slider::before {
+            content: "";
+
+            position: absolute;
+
+            width: 16px;
+            height: 16px;
+
+            left: 3px;
+            top: 3px;
+
+            background: #ffffff;
+
+            border-radius: 50%;
+
+            box-shadow:
+                0 1px 3px
+                rgba(0, 0, 0, 0.20);
+
+            transition:
+                transform 0.2s ease;
+        }
+
+        .checkbox input:checked + .slider {
+            background: var(--switch-on);
+        }
+
+        .checkbox input:checked + .slider::before {
+            transform:
+                translateX(18px);
+        }
+
+
+        /* =====================================================
+           AÇÕES
+           ===================================================== */
+
+        .acoes {
+            margin-top: 27px;
+            padding-top: 21px;
+
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+
+            gap: 10px;
+
+            border-top:
+                1px solid var(--border);
+        }
+
+        .botao {
+            min-height: 38px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 0 16px;
+
+            border-radius: 5px;
+
+            font-family: var(--font-ui);
+            font-size: 11px;
+            font-weight: 600;
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+            transition:
+                background 0.15s ease,
+                border-color 0.15s ease,
+                transform 0.05s ease;
+        }
+
+        .botao:active {
+            transform:
+                translateY(1px);
+        }
+
+        .botao-voltar {
+            border:
+                1px solid var(--border);
+
+            background:
+                var(--surface);
+
+            color:
+                var(--text-secondary);
+        }
+
+        .botao-voltar:hover {
+            background:
+                var(--surface-hover);
+
+            border-color:
+                var(--border-hover);
+
+            color:
+                var(--text);
+        }
+
+        .botao-salvar {
+            border:
+                1px solid var(--nexo-blue);
+
+            background:
+                var(--nexo-blue);
+
+            color:
+                #ffffff;
+        }
+
+        .botao-salvar:hover {
+            background: #0b405f;
+            border-color: #0b405f;
+        }
+
+
+        /* =====================================================
+           RESPONSIVO
+           ===================================================== */
+
+        @media (max-width: 700px) {
+
+            .header-content {
+                padding: 0 18px;
+            }
+
+            .header-left {
+                gap: 10px;
+            }
+
+            .header-divider {
+                display: none;
+            }
+
+            .module-name {
+                display: none;
+            }
+
+            .datetime {
+                font-size: 10px;
+            }
+
+            .header-right {
+                gap: 10px;
+            }
+
+            .content {
+                padding: 32px 18px 42px;
+            }
+
+            .page-title {
+                font-size: 23px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .campo-completo {
+                grid-column: auto;
+            }
+
+            .acoes {
+                justify-content: stretch;
+            }
+
+            .botao {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 430px) {
+
+            .datetime {
+                display: none;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- Barra Superior Centralizada -->
+{% set modulo = "ATIVOS / NOVO" %}
+{% set voltar_url = "/ativos/config/pagina" %}
+{% include "header.html" %}
+
+
+    <!-- =====================================================
+         CONTEÚDO
+         ===================================================== -->
+
+    <main class="content">
+
+        <div class="page-heading">
+
+            <h1 class="page-title">
+                Adicionar ativo
+            </h1>
+
+            <p class="page-subtitle">
+                Cadastre um novo ativo no sistema NEXO.
+            </p>
+
+        </div>
+
+
+        <div
+            id="mensagem"
+            class="mensagem"
+        ></div>
+
+
+        <section class="card">
+
+            <!-- =============================================
+                 FORMULÁRIO
+                 ============================================= -->
+
+            <form
+                id="form-novo"
+                method="post"
+                action="/ativos/config/novo"
+            >
+
+                <div class="form-grid">
+
+                    <!-- NOME -->
+
+                    <div class="campo">
+
+                        <label for="nome">
+                            Nome
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nome"
+                            name="nome"
+                            required
+                            placeholder="Ex.: Usina Solar Brígida"
+                        >
+
+                    </div>
+
+
+                    <!-- APELIDO -->
+
+                    <div class="campo">
+
+                        <label for="apelido">
+                            Apelido
+                        </label>
+
+                        <input
+                            type="text"
+                            id="apelido"
+                            name="apelido"
+                            required
+                            placeholder="Ex.: UFV Brígida"
+                        >
+
+                    </div>
+
+
+                    <!-- ID LOCAL DE OPERAÇÃO -->
+
+                    <div class="campo">
+
+                        <label for="id_local_operacao">
+                            ID de Operação
+                        </label>
+
+                        <input
+                            type="text"
+                            id="id_local_operacao"
+                            name="id_local_operacao"
+                            placeholder="Ex.: 123456"
+                        >
+
+                        <div class="ajuda">
+                            Código utilizado na integração com o SINAPSE.
+                        </div>
+
+                    </div>
+
+
+                    <!-- CAPACIDADE -->
+
+                    <div class="campo">
+
+                        <label for="capacidade">
+                            Capacidade (MW)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="capacidade"
+                            name="capacidade"
+                            step="0.01"
+                            min="0"
+                            required
+                            placeholder="0.00"
+                        >
+
+                    </div>
+
+
+                    <!-- TIPO -->
+
+                    <div class="campo">
+
+                        <label for="tipo">
+                            Tipo
+                        </label>
+
+                        <input
+                            type="text"
+                            id="tipo"
+                            name="tipo"
+                            placeholder="Ex.: Fotovoltaica / Eólica"
+                        >
+
+                    </div>
+
+
+                    <!-- REGIÃO -->
+
+                    <div class="campo">
+
+                        <label for="regiao">
+                            Região
+                        </label>
+
+                        <input
+                            type="text"
+                            id="regiao"
+                            name="regiao"
+                            placeholder="Ex.: Nordeste"
+                        >
+
+                    </div>
+
+
+                    <!-- EMPRESA -->
+
+                    <div class="campo">
+
+                        <label for="empresa">
+                            Empresa
+                        </label>
+
+                        <input
+                            type="text"
+                            id="empresa"
+                            name="empresa"
+                            placeholder="Ex.: Companhia de Energia"
+                        >
+
+                    </div>
+
+
+                    <!-- LOGO -->
+
+                    <div class="campo">
+
+                        <label for="logo">
+                            Logo
+                        </label>
+
+                        <input
+                            type="text"
+                            id="logo"
+                            name="logo"
+                            placeholder="Caminho ou URL da imagem"
+                        >
+
+                    </div>
+
+
+                    <!-- COR -->
+
+                    <div class="campo">
+
+                        <label for="cor">
+                            Cor
+                        </label>
+
+                        <input
+                            type="text"
+                            id="cor"
+                            name="cor"
+                            placeholder="Ex.: #08314A"
+                        >
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="campo campo-completo">
+
+                        <label>
+                            Status do ativo
+                        </label>
+
+                        <div class="campo-checkbox">
+
+                            <div class="checkbox-info">
+
+                                <strong>
+                                    Ativo habilitado
+                                </strong>
+
+                                <span>
+                                    Define se o ativo estará disponível imediatamente para uso no NEXO.
+                                </span>
+
+                            </div>
+
+                            <label class="checkbox">
+
+                                <input
+                                    type="checkbox"
+                                    name="ativo"
+                                    value="true"
+                                    checked
+                                >
+
+                                <span class="slider"></span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     AÇÕES
+                     ========================================= -->
+
+                <div class="acoes">
+
+                    <a
+                        href="/ativos/config/pagina"
+                        class="botao botao-voltar"
+                    >
+                        ← Voltar para ativos
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="botao botao-salvar"
+                    >
+                        Cadastrar ativo
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    /* =========================================================
+       FORMULÁRIO
+       ========================================================= */
+
+    const formulario =
+        document.getElementById("form-novo");
+
+    const mensagem =
+        document.getElementById("mensagem");
+
+
+    formulario.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+            mensagem.className =
+                "mensagem";
+
+            mensagem.textContent =
+                "";
+
+            const dados =
+                new FormData(formulario);
+
+            try {
+
+                const resposta =
+                    await fetch(
+                        formulario.action,
+                        {
+                            method: "POST",
+                            body: dados
+                        }
+                    );
+
+                const resultado =
+                    await resposta.json();
+
+                if (
+                    !resposta.ok ||
+                    !resultado.ok
+                ) {
+
+                    throw new Error(
+                        resultado.detail ||
+                        resultado.mensagem ||
+                        "Não foi possível cadastrar o ativo."
+                    );
+                }
+
+                mensagem.className =
+                    "mensagem sucesso";
+
+                mensagem.textContent =
+                    "Ativo cadastrado com sucesso.";
+
+                setTimeout(
+                    function() {
+
+                        window.location.href =
+                            "/ativos/config/pagina";
+
+                    },
+                    700
+                );
+
+            } catch (erro) {
+
+                mensagem.className =
+                    "mensagem erro";
+
+                mensagem.textContent =
+                    erro.message ||
+                    "Erro ao cadastrar o ativo.";
+            }
+        }
+    );
+
+</script>
+
+</body>
+</html>

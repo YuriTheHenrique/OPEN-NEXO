@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>NEXO | Dashboard</title>
+
+
+    <!-- =====================================================
+         FONTES
+         ===================================================== -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         BIBLIOTECAS
+         ===================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    >
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+
+
+    <!-- =====================================================
+         CSS DO DASHBOARD
+         ===================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="/dashboard/static/css/dashboard.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="page">
+<!-- Barra Superior Centralizada -->
+{% set modulo = "DASHBOARD" %}
+{% set voltar_url = "/" %}
+{% include "header.html" %}
+
+
+    <!-- =====================================================
+         CONTEÚDO
+         ===================================================== -->
+
+    <main class="content">
+        <!-- =================================================
+             INDICADORES
+             ================================================= -->
+
+        <section class="dashboard-summary">
+
+
+            <div class="dashboard-stat card">
+
+                <div class="stat-label">
+                    Sistema
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="sistema"
+                >
+                    🟢 ONLINE
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-stat card">
+
+                <div class="stat-label">
+                    Usinas que tiveram restrição
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="usinas"
+                >
+                    -
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-stat card">
+
+                <div class="stat-label">
+                    Solicitações recebidas
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="eventos"
+                >
+                    -
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-stat card">
+
+                <div class="stat-label">
+                    Última solicitação
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="ultimo"
+                >
+                    -
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-stat card">
+
+                <div class="stat-label">
+                    Tempo médio COS
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="tempoResposta"
+                >
+                    -
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-stat dashboard-date-card card">
+
+                <div class="stat-label">
+                    Data
+                </div>
+
+                <input
+                    type="text"
+                    id="seletorData"
+                    class="dashboard-date"
+                    placeholder="Selecionar data"
+                >
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             USINAS
+             ================================================= -->
+
+        <section class="dashboard-section">
+
+            <div
+                id="painelUsinas"
+                class="dashboard-usinas"
+            ></div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             GRÁFICO DE RESTRIÇÃO
+             ================================================= -->
+
+        <section class="dashboard-section">
+
+            <div class="card chart-card">
+
+
+                <div class="chart-header">
+
+                    <div>
+
+                        <h2 class="section-title">
+                            Restrição por usina
+                        </h2>
+
+                    </div>
+
+
+                    <div class="chart-controls">
+
+
+                        <div class="chart-filters">
+
+                            <button
+                                type="button"
+                                class="dashboard-button"
+                                onclick="filtroGrafico('todas')"
+                            >
+                                Todas
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="dashboard-button"
+                                onclick="filtroGrafico('restritas')"
+                            >
+                                Apenas restritas
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="dashboard-button"
+                                onclick="filtroGrafico('top')"
+                            >
+                                Top impacto
+                            </button>
+
+                        </div>
+
+
+                        <select
+                            id="filtroUsina"
+                            class="dashboard-select"
+                            onchange="aplicarFiltroUsina()"
+                        >
+
+                            <option value="todas">
+                                Todas as usinas
+                            </option>
+
+                        </select>
+
+
+                        <div class="chart-mode-group">
+
+                            <button
+                                id="modoRestricao"
+                                type="button"
+                                class="chart-mode-button active"
+                                onclick="alternarModoGrafico('restricao')">
+                                Restrição
+                            </button>
+
+                            <button
+                                id="modoLimite"
+                                type="button"
+                                class="chart-mode-button"
+                                onclick="alternarModoGrafico('limite')">
+                                Limite
+                            </button>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <div class="chart-container">
+
+                    <canvas
+                        id="graficoRestricaoUsinas"
+                    ></canvas>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================================================
+     MODAL DE HISTÓRICO
+     ========================================================= -->
+
+<div
+    class="modal"
+    id="modalHistorico"
+>
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h2 id="tituloHistorico"></h2>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    onclick="fecharHistorico()"
+                    aria-label="Fechar"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div
+                class="modal-body"
+                id="corpoHistorico"
+            ></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     DASHBOARD
+     ========================================================= -->
+
+<script>
+
+    function alternarDevMode() {
+
+        document.body.classList.toggle(
+            "devmode"
+        );
+
+
+        localStorage.setItem(
+            "devmode",
+            document.body.classList.contains(
+                "devmode"
+            )
+        );
+
+    }
+
+
+    function obterDataLocal() {
+
+        const hoje = new Date();
+
+        return (
+            hoje.getFullYear() +
+            "-" +
+            String(
+                hoje.getMonth() + 1
+            ).padStart(2, "0") +
+            "-" +
+            String(
+                hoje.getDate()
+            ).padStart(2, "0")
+        );
+
+    }
+
+
+    carregarStatus();
+
+</script>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT DO MÓDULO
+     ========================================================= -->
+
+<script src="/dashboard/static/js/usinas.js"></script>
+
+<script src="/dashboard/static/js/graficos.js"></script>
+
+<script src="/dashboard/static/js/dashboard.js"></script>
+
+<script src="/dashboard/static/js/websocket.js"></script>
+
+
+</body>
+
+</html>

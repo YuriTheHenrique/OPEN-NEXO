@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>NEXO · Tetris</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/tetris/static/tetris.css"
+    >
+</head>
+
+<body>
+
+<div class="page">
+
+{% set modulo = "TETRIS" %}
+{% set voltar_url = "/" %}
+{% include "header.html" %}
+
+
+    <!-- =====================================================
+         CONTEÚDO
+         ===================================================== -->
+
+    <main class="content">
+
+        <div class="page-heading">
+
+            <div>
+                <h1 class="page-title">Tetris</h1>
+
+                <p class="page-subtitle">
+                    Módulo recreativo · NEXO
+                </p>
+            </div>
+
+            <a
+                href="/"
+                class="back-button"
+            >
+                ← Início
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             JOGO
+             ================================================= -->
+
+        <section class="game-section">
+
+            <!-- ESQUERDA -->
+
+            <aside class="side left-side">
+
+                <div class="card" id="holdCard">
+
+                    <div class="card-title">
+                        Hold
+                    </div>
+
+                    <canvas id="hold"></canvas>
+
+                </div>
+
+
+                <div class="card controls-card">
+
+                    <div class="card-title">
+                        Controles
+                    </div>
+
+                    <div class="keys">
+
+                        <div>
+                            <kbd>←</kbd>
+                            <kbd>→</kbd>
+                        </div>
+
+                        <span>Movimento</span>
+
+
+                        <div>
+                            <kbd>↓</kbd>
+                        </div>
+
+                        <span>Soft drop</span>
+
+
+                        <div>
+                            <kbd>↑</kbd>
+                            <kbd>X</kbd>
+                        </div>
+
+                        <span>Rotacionar</span>
+
+
+                        <div>
+                            <kbd>Z</kbd>
+                        </div>
+
+                        <span>Rotacionar ←</span>
+
+
+                        <div>
+                            <kbd>Space</kbd>
+                        </div>
+
+                        <span>Hard drop</span>
+
+
+                        <div>
+                            <kbd>C</kbd>
+                        </div>
+
+                        <span>Hold</span>
+
+
+                        <div>
+                            <kbd>P</kbd>
+                        </div>
+
+                        <span>Pausar</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="toolbar">
+
+                    <button
+                        class="toolbar-button"
+                        id="btnPause"
+                        type="button"
+                    >
+                        PAUSE
+                    </button>
+
+                    <button
+                        class="toolbar-button"
+                        id="btnSound"
+                        type="button"
+                    >
+                        SOUND
+                    </button>
+
+                </div>
+
+            </aside>
+
+
+            <!-- CENTRO -->
+
+            <div class="board-column">
+
+                <div class="board-wrap">
+
+                    <canvas id="board"></canvas>
+
+                    <div
+                        class="toast"
+                        id="toast"
+                    ></div>
+
+
+                    <div
+                        class="overlay show"
+                        id="overlay"
+                    >
+
+                        <div class="overlay-code">
+                            NEXO / RECREAÇÃO
+                        </div>
+
+                        <h2 id="ovTitle">
+                            TETRIS
+                        </h2>
+
+                        <p id="ovText">
+                            Empilhe os blocos, complete as linhas
+                            e mantenha o sistema operacional.
+                        </p>
+
+                        <div
+                            class="score-line"
+                            id="ovScore"
+                        ></div>
+
+                        <button
+                            class="primary-button"
+                            id="ovBtn"
+                            type="button"
+                        >
+                            Iniciar
+
+                        <button
+                            class="secondary-button"
+                            id="ovBtn2"
+                            type="button"
+                            style="display:none"
+                        >
+                            Reiniciar
+                        </button>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CONTROLES TOUCH -->
+
+                <div class="touch">
+
+                    <div class="touch-row">
+
+                        <button data-act="left">
+                            ←
+                        </button>
+
+                        <button data-act="rotccw">
+                            ↺
+                        </button>
+
+                        <button data-act="rotcw">
+                            ↻
+                        </button>
+
+                        <button data-act="right">
+                            →
+                        </button>
+
+                    </div>
+
+
+                    <div class="touch-row">
+
+                        <button data-act="soft">
+                            ↓
+                            <small>SOFT</small>
+                        </button>
+
+                        <button data-act="hard">
+                            ⤓
+                            <small>DROP</small>
+                        </button>
+
+                        <button data-act="hold">
+                            ⇄
+                            <small>HOLD</small>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DIREITA -->
+
+            <aside class="side right-side">
+
+                <div class="card stats-card">
+
+                    <div class="card-title">
+                        Indicadores
+                    </div>
+
+                    <div class="stats-grid">
+
+                        <div class="stat">
+                            <span>Score</span>
+                            <b
+                                class="big"
+                                id="score"
+                            >0</b>
+                        </div>
+
+                        <div class="stat">
+                            <span>Best</span>
+                            <b id="best">0</b>
+                        </div>
+
+                        <div class="stat">
+                            <span>Lines</span>
+                            <b id="lines">0</b>
+                        </div>
+
+                        <div class="stat">
+                            <span>Level</span>
+                            <b id="level">1</b>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="card"
+                    id="nextCard"
+                >
+
+                    <div class="card-title">
+                        Next
+                    </div>
+
+                    <canvas id="next"></canvas>
+
+                </div>
+
+            </aside>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="/tetris/static/tetris.js"></script>
+
+</body>
+</html>

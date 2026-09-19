@@ -28,8 +28,7 @@ Desenvolvido por **Yuri Henrique**.
 
 - [Arquitetura](docs/architecture.md)
 - [Guia de Desenvolvimento](docs/development-guide.md)
-- [Roadmap](docs/roadmap.md)
-- [Glossário](docs/glossary.md)
+- [Fluxo do Gateway/whatsapp](docs/fluxo%20gateway.md)
 - [Decisões Arquiteturais](docs/decisions/)
 
 ## Tecnologias

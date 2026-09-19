@@ -20,7 +20,7 @@ Cada módulo deve possuir responsabilidades bem definidas.
 
 Estrutura típica:
 
-    `modulo/
+    modulo/
     ├── __init__.py
     ├── plugin.py
     ├── models.py

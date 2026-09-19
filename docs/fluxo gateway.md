@@ -1,3 +1,4 @@
+```text
 COMMS envia mensagem
          │
 Gateway grava no message-queue.json
@@ -17,3 +18,4 @@ Gateway grava no message-queue.json
          │              │
        tenta        descarta
      novamente    e registra log
+```
